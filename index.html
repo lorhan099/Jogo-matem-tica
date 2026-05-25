@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 Cofre Matemático - Semana da Matemática</title>
+    <title>🔐 Cofre Matemático 3° B- Semana da Matemática</title>
     <style>
         :root {
             --bg: #0a0a0f;
@@ -20,6 +20,8 @@
             --btn-hover: #505070;
             --text: #e0e0e0;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --timer-bg: #111128;
+            --timer-warn: #ff6b6b;
         }
 
         * {
@@ -32,12 +34,14 @@
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 70%);
             font-family: 'Segoe UI', 'JetBrains Mono', 'Courier New', monospace;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             overflow-x: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            position: relative;
         }
 
         /* Partículas de fundo */
@@ -81,10 +85,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             width: 95%;
-            max-width: 600px;
-            padding: 20px;
+            max-width: 650px;
+            padding: 20px 20px 0;
         }
 
         /* Título */
@@ -147,11 +151,57 @@
             font-weight: 400;
         }
 
+        /* Cronômetro */
+        .cronometro-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--timer-bg);
+            border: 2px solid #333355;
+            border-radius: 30px;
+            padding: 8px 18px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .cronometro-wrapper.urgente {
+            border-color: var(--timer-warn);
+            animation: piscar-timer 0.8s ease-in-out infinite;
+        }
+        @keyframes piscar-timer {
+            0%,
+            100% {
+                border-color: var(--timer-warn);
+                box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+            }
+            50% {
+                border-color: #ff3d3d;
+                box-shadow: 0 0 30px rgba(255, 61, 61, 0.8);
+            }
+        }
+        .cronometro-icone {
+            font-size: 1.4rem;
+        }
+        .cronometro-tempo {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--display-text);
+            letter-spacing: 2px;
+            min-width: 70px;
+            text-align: center;
+            text-shadow: 0 0 15px var(--display-text);
+            transition: color 0.3s;
+        }
+        .cronometro-tempo.urgente {
+            color: var(--timer-warn);
+            text-shadow: 0 0 20px var(--timer-warn);
+        }
+
         /* Cofre visual */
         .cofre-wrapper {
             position: relative;
-            width: 220px;
-            height: 220px;
+            width: 240px;
+            height: 240px;
             perspective: 800px;
         }
         .cofre {
@@ -165,8 +215,8 @@
             transform: rotateY(25deg) rotateX(-5deg) translateZ(30px);
         }
         .cofre-corpo {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
             background: linear-gradient(145deg, #3d3d55 0%, #252535 40%, #1a1a2a 100%);
             border-radius: 20px;
             margin: 10px auto;
@@ -177,8 +227,9 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             transition: all 0.5s;
+            padding: 10px;
         }
         .cofre-corpo.abrindo {
             border-color: var(--gold);
@@ -199,21 +250,24 @@
         .cofre-display {
             background: var(--display-bg);
             border-radius: 10px;
-            padding: 10px 20px;
+            padding: 8px 10px;
             border: 2px solid #333;
             box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
             display: flex;
-            gap: 8px;
+            gap: 5px;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
         }
         .digito-slot {
-            width: 32px;
-            height: 44px;
+            width: 28px;
+            height: 40px;
             background: #0d0d1a;
-            border-radius: 6px;
+            border-radius: 5px;
             border: 1px solid #333;
             color: var(--display-text);
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -237,8 +291,8 @@
             }
         }
         .cofre-roda {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: radial-gradient(circle, #666 0%, #333 70%);
             border: 3px solid #777;
@@ -264,9 +318,9 @@
         .painel {
             background: linear-gradient(160deg, #1e1e32 0%, #16162a 100%);
             border-radius: 20px;
-            padding: 20px 24px;
+            padding: 18px 20px;
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             border: 2px solid #333355;
             box-shadow: var(--shadow);
             transition: all 0.4s;
@@ -302,7 +356,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -325,23 +379,24 @@
             border-radius: 12px;
             padding: 16px;
             text-align: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             border: 1px solid #2a2a45;
-            min-height: 50px;
+            min-height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .enunciado-texto {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #fff;
             font-weight: 700;
             letter-spacing: 1px;
             font-family: 'JetBrains Mono', 'Courier New', monospace;
+            word-break: break-word;
         }
         .tipo-desafio {
             color: #aaa;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 4px;
@@ -391,12 +446,12 @@
             margin-top: 8px;
         }
         .btn {
-            padding: 12px 22px;
+            padding: 11px 20px;
             border-radius: 25px;
             border: none;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             letter-spacing: 0.5px;
             transition: all 0.3s;
             font-family: inherit;
@@ -440,6 +495,29 @@
         .btn-proximo.visivel {
             display: inline-block;
         }
+        .btn-comecar {
+            background: var(--gold);
+            color: #0a0a0f;
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 16px 40px;
+            letter-spacing: 2px;
+            box-shadow: 0 0 40px rgba(212, 168, 67, 0.7);
+            animation: pulsar-botao 1.5s ease-in-out infinite;
+        }
+        @keyframes pulsar-botao {
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(212, 168, 67, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 70px rgba(240, 208, 120, 1), 0 0 100px rgba(212, 168, 67, 0.5);
+            }
+        }
+        .btn-comecar:hover {
+            background: var(--gold-light);
+            transform: scale(1.05);
+        }
         .dicas-restantes {
             color: #888;
             font-size: 0.78rem;
@@ -449,7 +527,7 @@
         .mensagem {
             text-align: center;
             font-weight: 700;
-            min-height: 24px;
+            min-height: 22px;
             margin-top: 6px;
             transition: all 0.3s;
         }
@@ -458,6 +536,108 @@
         }
         .mensagem.erro {
             color: var(--erro);
+        }
+
+        /* Rodapé */
+        .rodape {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 15px 20px;
+            color: #666688;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            margin-top: 10px;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+        .rodape span {
+            color: var(--gold-light);
+        }
+
+        /* Overlay de início */
+        .overlay-inicio {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .overlay-inicio.escondido {
+            display: none;
+        }
+        .card-inicio {
+            background: linear-gradient(160deg, #1e1e32, #16162a);
+            border-radius: 24px;
+            padding: 35px 30px;
+            text-align: center;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 60px rgba(212, 168, 67, 0.5);
+            max-width: 450px;
+            width: 90%;
+        }
+        .card-inicio h2 {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        .card-inicio p {
+            color: #ccc;
+            margin: 8px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .card-inicio .tempo-destaque {
+            color: var(--gold-light);
+            font-weight: 900;
+            font-size: 1.3rem;
+        }
+
+        /* Overlay de game over (tempo esgotado) */
+        .overlay-gameover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .overlay-gameover.ativo {
+            display: flex;
+        }
+        .card-gameover {
+            background: linear-gradient(160deg, #2e1e1e, #2a1616);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid var(--erro);
+            box-shadow: 0 0 60px rgba(255, 61, 61, 0.6);
+            animation: entrada-triunfal 0.7s ease-out;
+            max-width: 420px;
+            width: 90%;
+        }
+        .card-gameover h2 {
+            font-size: 2rem;
+            color: var(--erro);
+            margin-bottom: 8px;
+        }
+        .card-gameover .emoji-gameover {
+            font-size: 5rem;
         }
 
         /* Tela de vitória */
@@ -544,32 +724,47 @@
             }
         }
 
+        /* Conteúdo do jogo (escondido até começar) */
+        .jogo-conteudo {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .jogo-conteudo.ativo {
+            display: flex;
+        }
+
         /* Responsivo */
-        @media (max-width: 400px) {
+        @media (max-width: 450px) {
             .cofre-wrapper {
-                width: 160px;
-                height: 160px;
+                width: 180px;
+                height: 180px;
             }
             .cofre-corpo {
-                width: 145px;
-                height: 145px;
+                width: 160px;
+                height: 160px;
                 border-radius: 16px;
             }
             .digito-slot {
-                width: 24px;
-                height: 34px;
-                font-size: 1.2rem;
+                width: 22px;
+                height: 30px;
+                font-size: 1rem;
             }
             .cofre-roda {
-                width: 36px;
-                height: 36px;
+                width: 35px;
+                height: 35px;
             }
             .enunciado-texto {
                 font-size: 1rem;
             }
             .btn {
-                padding: 10px 16px;
-                font-size: 0.85rem;
+                padding: 9px 14px;
+                font-size: 0.8rem;
+            }
+            .cronometro-tempo {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -579,93 +774,130 @@
     <!-- Partículas de fundo -->
     <div class="particulas" id="particulas"></div>
 
-    <!-- Container principal -->
-    <div class="container">
-        <!-- Título -->
-        <div class="titulo">
-            <span class="icone" id="iconeCofre">🔐</span>
-            COFRE MATEMÁTICO
-            <div class="subtitulo">Semana da Matemática</div>
-        </div>
-
-        <!-- Cofre visual -->
-        <div class="cofre-wrapper">
-            <div class="cofre" id="cofre3d">
-                <div class="cofre-corpo" id="cofreCorpo">
-                    <div class="cofre-display" id="cofreDisplay">
-                        <div class="digito-slot" id="slot0">_</div>
-                        <div class="digito-slot" id="slot1">_</div>
-                        <div class="digito-slot" id="slot2">_</div>
-                        <div class="digito-slot" id="slot3">_</div>
-                        <div class="digito-slot" id="slot4">_</div>
-                    </div>
-                    <div class="cofre-roda" id="cofreRoda"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Painel de desafio -->
-        <div class="painel" id="painelDesafio">
-            <div class="etapa-info">
-                <span class="badge-etapa" id="badgeEtapa">ETAPA 1/5</span>
-                <span class="pontuacao">⭐ <span id="pontuacao">0</span> pts</span>
-            </div>
-            <div class="tipo-desafio" id="tipoDesafio">ARITMÉTICA</div>
-            <div class="enunciado">
-                <span class="enunciado-texto" id="enunciadoTexto">Calcule: 27 + 15</span>
-            </div>
-            <div class="input-area">
-                <input type="number" class="input-resposta" id="inputResposta" placeholder="Sua resposta" autocomplete="off">
-                <button class="btn btn-verificar" id="btnVerificar">✓ Verificar</button>
-            </div>
-            <div class="botoes">
-                <button class="btn btn-dica" id="btnDica">💡 Dica</button>
-                <button class="btn btn-proximo" id="btnProximo">▶ Próximo desafio</button>
-                <button class="btn btn-reiniciar" id="btnReiniciar">🔄 Reiniciar</button>
-            </div>
-            <div class="dicas-restantes" id="dicasRestantes">Dicas restantes: 3</div>
-            <div class="mensagem" id="mensagem"></div>
+    <!-- Overlay de início -->
+    <div class="overlay-inicio" id="overlayInicio">
+        <div class="card-inicio">
+            <div style="font-size:4rem;">🔐</div>
+            <h2>COFRE MATEMÁTICO 3° B</h2>
+            <p>Resolva <strong>10 desafios</strong> de aritmética e álgebra para revelar a senha secreta do cofre!</p>
+            <p>Você terá <span class="tempo-destaque">⏱️ 7 minutos</span> para completar todos os desafios.</p>
+            <p style="font-size:0.85rem;color:#888;">Use as dicas com sabedoria — cada uma custa pontos!</p>
+            <button class="btn btn-comecar" id="btnComecar">🚀 COMEÇAR DESAFIO</button>
         </div>
     </div>
+
+    <!-- Container principal (conteúdo do jogo) -->
+    <div class="container">
+        <div class="jogo-conteudo" id="jogoConteudo">
+            <!-- Título -->
+            <div class="titulo">
+                <span class="icone" id="iconeCofre">🔐</span>
+                COFRE MATEMÁTICO 3° B
+                <div class="subtitulo">Semana da Matemática</div>
+            </div>
+
+            <!-- Cronômetro -->
+            <div class="cronometro-wrapper" id="cronometroWrapper">
+                <span class="cronometro-icone">⏱️</span>
+                <span class="cronometro-tempo" id="cronometroTempo">07:00</span>
+            </div>
+
+            <!-- Cofre visual -->
+            <div class="cofre-wrapper">
+                <div class="cofre" id="cofre3d">
+                    <div class="cofre-corpo" id="cofreCorpo">
+                        <div class="cofre-display" id="cofreDisplay"></div>
+                        <div class="cofre-roda" id="cofreRoda"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de desafio -->
+            <div class="painel" id="painelDesafio">
+                <div class="etapa-info">
+                    <span class="badge-etapa" id="badgeEtapa">ETAPA 1/10</span>
+                    <span class="pontuacao">⭐ <span id="pontuacao">0</span> pts</span>
+                </div>
+                <div class="tipo-desafio" id="tipoDesafio">ARITMÉTICA</div>
+                <div class="enunciado">
+                    <span class="enunciado-texto" id="enunciadoTexto">Calcule: 27 + 15</span>
+                </div>
+                <div class="input-area">
+                    <input type="number" class="input-resposta" id="inputResposta" placeholder="Sua resposta" autocomplete="off">
+                    <button class="btn btn-verificar" id="btnVerificar">✓ Verificar</button>
+                </div>
+                <div class="botoes">
+                    <button class="btn btn-dica" id="btnDica">💡 Dica</button>
+                    <button class="btn btn-proximo" id="btnProximo">▶ Próximo desafio</button>
+                    <button class="btn btn-reiniciar" id="btnReiniciar">🔄 Reiniciar</button>
+                </div>
+                <div class="dicas-restantes" id="dicasRestantes">Dicas restantes: 3</div>
+                <div class="mensagem" id="mensagem"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <span>Álgebra In Foco 2k26</span> | Adalgisa Bonfim Soares
+    </footer>
 
     <!-- Overlay de vitória -->
     <div class="overlay-vitoria" id="overlayVitoria">
         <div class="card-vitoria">
             <div class="emoji-vitoria">🎉</div>
             <h2>COFRE ABERTO!</h2>
-            <p style="color:#ccc;">Você desvendou todos os segredos matemáticos!</p>
+            <p style="color:#ccc;">Você desvendou todos os 10 segredos matemáticos!</p>
             <p class="pontuacao-final">⭐ <span id="pontuacaoFinal">0</span> pontos</p>
+            <p style="color:#aaa;font-size:0.85rem;" id="tempoRestanteVitoria"></p>
             <p style="color:#aaa;font-size:0.85rem;">A matemática é a chave para todos os mistérios! 🔑</p>
             <button class="btn btn-verificar" style="margin-top:16px;" onclick="reiniciarJogo()">🔄 Jogar Novamente</button>
         </div>
     </div>
 
-    <script>
-        // ==================== JOGO COFRE MATEMÁTICO ====================
+    <!-- Overlay de game over (tempo esgotado) -->
+    <div class="overlay-gameover" id="overlayGameOver">
+        <div class="card-gameover">
+            <div class="emoji-gameover">⏰</div>
+            <h2>TEMPO ESGOTADO!</h2>
+            <p style="color:#ccc;">O cronômetro de 7 minutos acabou!</p>
+            <p style="color:#ff6b6b;font-weight:700;">Você conseguiu revelar <span id="etapasConcluidasGameOver">0</span> de 10 dígitos.</p>
+            <button class="btn btn-verificar" style="margin-top:16px;background:#ff6b6b;color:#fff;" onclick="reiniciarJogo()">🔄 Tentar Novamente</button>
+        </div>
+    </div>
 
-        // Estado do jogo
+    <script>
+        // ==================== JOGO COFRE MATEMÁTICO (10 ETAPAS + CRONÔMETRO) ====================
+
         const estado = {
-            etapaAtual: 0, // 0 a 4
-            totalEtapas: 5,
-            senha: [], // dígitos da senha (0-9) - um para cada etapa
-            descobertos: [null, null, null, null, null], // dígitos já descobertos
+            etapaAtual: 0,
+            totalEtapas: 10,
+            senha: [],
+            descobertos: Array(10).fill(null),
             pontuacao: 0,
             dicasRestantes: 3,
             jogoConcluido: false,
-            desafioAtual: null, // objeto do desafio atual
-            respondido: false, // se já respondeu a etapa atual
+            desafioAtual: null,
+            respondido: false,
+            tempoRestante: 420, // 7 minutos em segundos
+            timerAtivo: false,
+            timerInterval: null,
         };
 
-        // Referências DOM
         const $ = (sel) => document.querySelector(sel);
         const $$ = (sel) => document.querySelectorAll(sel);
 
         const dom = {
+            overlayInicio: $('#overlayInicio'),
+            btnComecar: $('#btnComecar'),
+            jogoConteudo: $('#jogoConteudo'),
             iconeCofre: $('#iconeCofre'),
             cofre3d: $('#cofre3d'),
             cofreCorpo: $('#cofreCorpo'),
             cofreRoda: $('#cofreRoda'),
-            slots: $$('.digito-slot'),
+            cofreDisplay: $('#cofreDisplay'),
+            cronometroWrapper: $('#cronometroWrapper'),
+            cronometroTempo: $('#cronometroTempo'),
             badgeEtapa: $('#badgeEtapa'),
             pontuacao: $('#pontuacao'),
             tipoDesafio: $('#tipoDesafio'),
@@ -680,135 +912,231 @@
             painelDesafio: $('#painelDesafio'),
             overlayVitoria: $('#overlayVitoria'),
             pontuacaoFinal: $('#pontuacaoFinal'),
+            tempoRestanteVitoria: $('#tempoRestanteVitoria'),
+            overlayGameOver: $('#overlayGameOver'),
+            etapasConcluidasGameOver: $('#etapasConcluidasGameOver'),
         };
 
         // ==================== GERADORES DE DESAFIOS ====================
-
-        function gerarDesafioAritmetica() {
-            // Operações básicas: resultado deve ser um dígito (0-9) ou número pequeno
-            const ops = [
-                { sinal: '+', gerar: () => { const a = rand(2, 40); const b = rand(1, 9); return { expr: `${a} + ${b}`,
-                        resp: a + b }; } },
-                { sinal: '-', gerar: () => { const a = rand(10, 50); const b = rand(1, a - 1); return { expr: `${a} - ${b}`,
-                        resp: a - b }; } },
-                { sinal: '×', gerar: () => { const a = rand(2, 12); const b = rand(2, 9); return { expr: `${a} × ${b}`,
-                        resp: a * b }; } },
-                { sinal: '÷', gerar: () => { const b = rand(2, 9); const resp = rand(2, 10); const a = b * resp; return { expr: `${a} ÷ ${b}`,
-                        resp: resp }; } },
-            ];
-            const op = ops[rand(0, ops.length - 1)];
-            const resultado = op.gerar();
-            // Garantir que a resposta seja um número positivo de até 2 dígitos
-            if (resultado.resp < 0 || resultado.resp > 99) return gerarDesafioAritmetica();
-            return {
-                tipo: 'ARITMÉTICA',
-                enunciado: `Calcule: ${resultado.expr}`,
-                resposta: resultado.resp,
-                dica: `Resolva a operação ${op.sinal}. O resultado é ${resultado.resp.toString().length} dígito(s).`,
-            };
-        }
-
-        function gerarDesafioExpressao() {
-            // Expressão com parênteses ou operações combinadas
-            const padroes = [
-                () => { const a = rand(2, 9); const b = rand(2, 9); const c = rand(1, 5); return { expr: `(${a} + ${b}) × ${c}`,
-                        resp: (a + b) * c }; },
-                () => { const a = rand(5, 20); const b = rand(2, 8); const c = rand(1, 5); return { expr: `${a} - (${b} × ${c})`,
-                        resp: a - (b * c) }; },
-                () => { const a = rand(3, 10); const b = rand(2, 6); const c = rand(2, 5); return { expr: `${a} × ${b} + ${c}`,
-                        resp: a * b + c }; },
-                () => { const a = rand(10, 30); const b = rand(2, 6); const c = rand(2, 5); return { expr: `${a} ÷ ${b} + ${c}`,
-                        resp: Math.floor(a / b) + c, forcarInteiro: true }; },
-            ];
-            const padrao = padroes[rand(0, padroes.length - 1)];
-            const resultado = padrao();
-            if (resultado.resp < 0 || resultado.resp > 99) return gerarDesafioExpressao();
-            if (resultado.forcarInteiro && !Number.isInteger(resultado.resp)) return gerarDesafioExpressao();
-            return {
-                tipo: 'EXPRESSÃO NUMÉRICA',
-                enunciado: `Resolva: ${resultado.expr}`,
-                resposta: Math.round(resultado.resp),
-                dica: 'Lembre-se da ordem: parênteses primeiro, depois multiplicação/divisão, depois soma/subtração.',
-            };
-        }
-
-        function gerarDesafioEquacao() {
-            // Equação simples: ax + b = c  ou  ax - b = c
-            const x = rand(1, 9);
-            const a = rand(2, 6);
-            const b = rand(1, 10);
-            const tipo = rand(0, 1);
-            let expr, resp;
-            if (tipo === 0) {
-                const c = a * x + b;
-                expr = `${a}x + ${b} = ${c}`;
-                resp = x;
-            } else {
-                const c = a * x - b;
-                expr = `${a}x - ${b} = ${c}`;
-                resp = x;
-            }
-            return {
-                tipo: 'EQUAÇÃO ALGÉBRICA',
-                enunciado: `Encontre x: ${expr}`,
-                resposta: resp,
-                dica: `Isole o x. Subtraia/adiciona ${b} dos dois lados, depois divida por ${a}.`,
-            };
-        }
-
-        function gerarDesafioSequencia() {
-            // Sequência ou padrão
-            const padroes = [
-                { seq: [2, 4, 6, 8], resp: 10, desc: 'PA razão +2' },
-                { seq: [3, 6, 9, 12], resp: 15, desc: 'PA razão +3' },
-                { seq: [1, 4, 9, 16], resp: 25, desc: 'Quadrados perfeitos' },
-                { seq: [2, 4, 8, 16], resp: 32, desc: 'Potências de 2' },
-                { seq: [1, 1, 2, 3, 5], resp: 8, desc: 'Fibonacci' },
-                { seq: [10, 8, 6, 4], resp: 2, desc: 'PA razão -2' },
-                { seq: [1, 3, 6, 10], resp: 15, desc: 'Números triangulares' },
-            ];
-            const p = padroes[rand(0, padroes.length - 1)];
-            return {
-                tipo: 'SEQUÊNCIA/PADRÃO',
-                enunciado: `Qual o próximo número? ${p.seq.join(', ')} , ?`,
-                resposta: p.resp,
-                dica: `Observe o padrão: ${p.desc}.`,
-            };
-        }
-
-        function gerarDesafioAleatorio() {
-            const geradores = [
-                gerarDesafioAritmetica,
-                gerarDesafioExpressao,
-                gerarDesafioEquacao,
-                gerarDesafioSequencia,
-            ];
-            return geradores[rand(0, geradores.length - 1)]();
-        }
 
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
+        function gerarAritmetica() {
+            const tipos = [
+                () => { const a = rand(15, 80); const b = rand(10, 70); return { expr: `${a} + ${b}`, resp: a + b }; },
+                () => { const a = rand(30, 100); const b = rand(10, a - 5); return { expr: `${a} - ${b}`, resp: a - b }; },
+                () => { const a = rand(3, 15); const b = rand(3, 12); return { expr: `${a} × ${b}`, resp: a * b }; },
+                () => { const b = rand(2, 9); const resp = rand(3, 15); const a = b * resp; return { expr: `${a} ÷ ${b}`,
+                        resp: resp }; },
+                () => { const a = rand(10, 60); const b = rand(10, 60); const soma = a + b; return { expr: `Média de ${a} e ${b}`,
+                        resp: Math.round(soma / 2) }; },
+                () => { const n = rand(8, 30);
+                    const mult = rand(2, 3); return { expr: `${mult} × ${n}`, resp: mult * n }; },
+            ];
+            const t = tipos[rand(0, tipos.length - 1)]();
+            return { tipo: 'ARITMÉTICA', enunciado: `Calcule: ${t.expr}`, resposta: t.resp, dica: 'Realize a operação indicada.' };
+        }
+
+        function gerarExpressao() {
+            const padroes = [
+                () => { const a = rand(2, 9); const b = rand(2, 9); const c = rand(2, 6); return { expr: `(${a} + ${b}) × ${c}`,
+                        resp: (a + b) * c }; },
+                () => { const a = rand(10, 30); const b = rand(2, 7); const c = rand(2, 5); return { expr: `${a} - ${b} × ${c}`,
+                        resp: a - b * c }; },
+                () => { const a = rand(3, 9); const b = rand(2, 6); const c = rand(3, 8); return { expr: `${a} × ${b} + ${c}`,
+                        resp: a * b + c }; },
+                () => { const a = rand(20, 50); const b = rand(2, 6); const c = rand(2, 5); return { expr: `${a} ÷ ${b} + ${c}`,
+                        resp: Math.floor(a / b) + c }; },
+                () => { const a = rand(5, 12); const b = rand(3, 7); const c = rand(1, 4); return { expr: `(${a} - ${b}) × ${c} + 2`,
+                        resp: (a - b) * c + 2 }; },
+            ];
+            const p = padroes[rand(0, padroes.length - 1)]();
+            return { tipo: 'EXPRESSÃO NUMÉRICA', enunciado: `Resolva: ${p.expr}`, resposta: p.resp,
+                dica: 'Ordem: parênteses → multiplicação/divisão → soma/subtração.' };
+        }
+
+        function gerarEquacao() {
+            const x = rand(2, 15);
+            const a = rand(2, 7);
+            const b = rand(2, 20);
+            const variantes = [
+                { expr: `${a}x + ${b} = ${a * x + b}`, resp: x },
+                { expr: `${a}x - ${b} = ${a * x - b}`, resp: x },
+                { expr: `${a + 1}x + ${b} = ${(a + 1) * x + b}`, resp: x },
+            ];
+            const v = variantes[rand(0, variantes.length - 1)];
+            return { tipo: 'EQUAÇÃO ALGÉBRICA', enunciado: `Encontre x: ${v.expr}`, resposta: v.resp,
+                dica: 'Isole o termo com x e depois divida pelo coeficiente.' };
+        }
+
+        function gerarSequencia() {
+            const padroes = [
+                { seq: [2, 4, 6, 8, 10], resp: 12, desc: 'PA razão +2' },
+                { seq: [3, 6, 9, 12, 15], resp: 18, desc: 'PA razão +3' },
+                { seq: [1, 4, 9, 16, 25], resp: 36, desc: 'Quadrados perfeitos (n²)' },
+                { seq: [2, 4, 8, 16, 32], resp: 64, desc: 'Potências de 2' },
+                { seq: [1, 1, 2, 3, 5], resp: 8, desc: 'Sequência de Fibonacci' },
+                { seq: [20, 17, 14, 11, 8], resp: 5, desc: 'PA razão -3' },
+                { seq: [1, 3, 6, 10, 15], resp: 21, desc: 'Números triangulares' },
+                { seq: [5, 10, 20, 40, 80], resp: 160, desc: 'Multiplicação por 2' },
+            ];
+            const p = padroes[rand(0, padroes.length - 1)];
+            return { tipo: 'SEQUÊNCIA/PADRÃO', enunciado: `Próximo número: ${p.seq.join(', ')} , ?`, resposta: p.resp,
+                dica: `Padrão: ${p.desc}.` };
+        }
+
+        function gerarMMC_MDC() {
+            const a = rand(6, 30);
+            const b = rand(6, 30);
+            const mdc = (x, y) => { while (y) { [x, y] = [y, x % y]; } return x; };
+            const mmc = (x, y) => (x * y) / mdc(x, y);
+            const tipo = rand(0, 1);
+            if (tipo === 0) return { tipo: 'MMC', enunciado: `MMC(${a}, ${b})`, resposta: mmc(a, b),
+                dica: 'Decomponha em fatores primos.' };
+            else return { tipo: 'MDC', enunciado: `MDC(${a}, ${b})`, resposta: mdc(a, b),
+                dica: 'Liste os divisores comuns e escolha o maior.' };
+        }
+
+        function gerarPotenciaRaiz() {
+            const base = rand(2, 7);
+            const exp = rand(2, 4);
+            const potencia = Math.pow(base, exp);
+            const tipo = rand(0, 1);
+            if (tipo === 0) return { tipo: 'POTENCIAÇÃO', enunciado: `${base} ^ ${exp} = ?`, resposta: potencia,
+                dica: 'Multiplique a base por ela mesma várias vezes.' };
+            else { const raiz = rand(2, 12); return { tipo: 'RAIZ QUADRADA', enunciado: `√${raiz * raiz} = ?`, resposta: raiz,
+                    dica: 'Qual número vezes ele mesmo dá esse valor?' }; }
+        }
+
+        function gerarPorcentagem() {
+            const valor = rand(50, 300);
+            const perc = rand(10, 50);
+            const resultado = Math.round((valor * perc) / 100);
+            return { tipo: 'PORCENTAGEM', enunciado: `${perc}% de ${valor}`, resposta: resultado,
+                dica: 'Multiplique o valor pela porcentagem e divida por 100.' };
+        }
+
+        function gerarDesafioAleatorio() {
+            const geradores = [
+                gerarAritmetica,
+                gerarExpressao,
+                gerarEquacao,
+                gerarSequencia,
+                gerarMMC_MDC,
+                gerarPotenciaRaiz,
+                gerarPorcentagem,
+            ];
+            const selecionado = geradores[rand(0, geradores.length - 1)]();
+            if (!Number.isInteger(selecionado.resposta) || selecionado.resposta < 0 || selecionado.resposta > 999) {
+                return gerarAritmetica();
+            }
+            return selecionado;
+        }
+
+        // ==================== CRONÔMETRO ====================
+
+        function formatarTempo(segundos) {
+            const min = Math.floor(segundos / 60);
+            const seg = segundos % 60;
+            return `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
+        }
+
+        function atualizarDisplayCronometro() {
+            dom.cronometroTempo.textContent = formatarTempo(estado.tempoRestante);
+            // Efeitos visuais de urgência
+            if (estado.tempoRestante <= 60) {
+                dom.cronometroTempo.classList.add('urgente');
+                dom.cronometroWrapper.classList.add('urgente');
+            } else {
+                dom.cronometroTempo.classList.remove('urgente');
+                dom.cronometroWrapper.classList.remove('urgente');
+            }
+        }
+
+        function iniciarCronometro() {
+            estado.tempoRestante = 420; // 7 minutos
+            estado.timerAtivo = true;
+            atualizarDisplayCronometro();
+            if (estado.timerInterval) clearInterval(estado.timerInterval);
+            estado.timerInterval = setInterval(() => {
+                estado.tempoRestante--;
+                atualizarDisplayCronometro();
+                if (estado.tempoRestante <= 0) {
+                    clearInterval(estado.timerInterval);
+                    estado.timerAtivo = false;
+                    tempoEsgotado();
+                }
+            }, 1000);
+        }
+
+        function pararCronometro() {
+            if (estado.timerInterval) {
+                clearInterval(estado.timerInterval);
+                estado.timerInterval = null;
+            }
+            estado.timerAtivo = false;
+        }
+
+        function tempoEsgotado() {
+            if (estado.jogoConcluido) return;
+            estado.jogoConcluido = true;
+            pararCronometro();
+            dom.inputResposta.disabled = true;
+            dom.btnVerificar.style.display = 'none';
+            dom.btnProximo.classList.remove('visivel');
+            // Contar etapas concluídas
+            const concluidas = estado.descobertos.filter(d => d !== null).length;
+            dom.etapasConcluidasGameOver.textContent = concluidas;
+            dom.overlayGameOver.classList.add('ativo');
+            dom.mensagem.textContent = '⏰ Tempo esgotado!';
+            dom.mensagem.className = 'mensagem erro';
+        }
+
         // ==================== LÓGICA DO JOGO ====================
 
         function gerarSenha() {
-            // Gera 5 dígitos aleatórios para a senha
-            const senha = [];
+            const s = [];
+            for (let i = 0; i < estado.totalEtapas; i++) s.push(rand(0, 9));
+            return s;
+        }
+
+        function criarSlotsHTML() {
+            dom.cofreDisplay.innerHTML = '';
             for (let i = 0; i < estado.totalEtapas; i++) {
-                senha.push(rand(0, 9));
+                const slot = document.createElement('div');
+                slot.className = 'digito-slot';
+                slot.id = `slot${i}`;
+                slot.textContent = '_';
+                dom.cofreDisplay.appendChild(slot);
             }
-            return senha;
+        }
+
+        function atualizarDisplaySlots() {
+            for (let i = 0; i < estado.totalEtapas; i++) {
+                const slot = document.getElementById(`slot${i}`);
+                if (slot) {
+                    if (estado.descobertos[i] !== null) {
+                        slot.textContent = estado.descobertos[i];
+                        slot.classList.add('preenchido');
+                    } else {
+                        slot.textContent = '_';
+                        slot.classList.remove('preenchido');
+                    }
+                }
+            }
         }
 
         function iniciarJogo() {
             estado.etapaAtual = 0;
             estado.senha = gerarSenha();
-            estado.descobertos = [null, null, null, null, null];
+            estado.descobertos = Array(10).fill(null);
             estado.pontuacao = 0;
             estado.dicasRestantes = 3;
             estado.jogoConcluido = false;
             estado.respondido = false;
+            criarSlotsHTML();
             atualizarDisplaySlots();
             atualizarPontuacao();
             atualizarDicas();
@@ -820,23 +1148,24 @@
             dom.inputResposta.className = 'input-resposta';
             dom.btnVerificar.style.display = 'inline-block';
             dom.overlayVitoria.classList.remove('ativo');
+            dom.overlayGameOver.classList.remove('ativo');
             dom.cofre3d.classList.remove('aberto');
             dom.cofreCorpo.classList.remove('abrindo');
             dom.iconeCofre.classList.remove('ativo');
             dom.painelDesafio.classList.remove('tremendo');
+            dom.cronometroTempo.classList.remove('urgente');
+            dom.cronometroWrapper.classList.remove('urgente');
+            pararCronometro();
+            iniciarCronometro();
             carregarEtapa(0);
-            // Focar no input
             setTimeout(() => dom.inputResposta.focus(), 400);
+            console.log('🔐 Senha do cofre (debug):', estado.senha.join(''));
         }
 
         function carregarEtapa(indice) {
             estado.etapaAtual = indice;
             estado.respondido = false;
             estado.desafioAtual = gerarDesafioAleatorio();
-            // Garantir que a resposta seja um número inteiro positivo
-            if (estado.desafioAtual.resposta < 0 || !Number.isInteger(estado.desafioAtual.resposta)) {
-                estado.desafioAtual = gerarDesafioAritmetica();
-            }
             dom.badgeEtapa.textContent = `ETAPA ${indice + 1}/${estado.totalEtapas}`;
             dom.tipoDesafio.textContent = estado.desafioAtual.tipo;
             dom.enunciadoTexto.textContent = estado.desafioAtual.enunciado;
@@ -852,56 +1181,43 @@
         }
 
         function verificarResposta() {
-            if (estado.respondido || estado.jogoConcluido) return;
-
-            const valorDigitado = dom.inputResposta.value.trim();
-            if (valorDigitado === '') {
+            if (estado.respondido || estado.jogoConcluido || estado.tempoRestante <= 0) return;
+            const valor = dom.inputResposta.value.trim();
+            if (valor === '') {
                 dom.mensagem.textContent = 'Digite uma resposta!';
                 dom.mensagem.className = 'mensagem erro';
                 return;
             }
-
-            const respostaJogador = parseInt(valorDigitado, 10);
-            if (isNaN(respostaJogador)) {
-                dom.mensagem.textContent = 'Resposta inválida! Digite um número.';
+            const respJogador = parseInt(valor, 10);
+            if (isNaN(respJogador)) {
+                dom.mensagem.textContent = 'Resposta inválida!';
                 dom.mensagem.className = 'mensagem erro';
                 return;
             }
-
-            const respostaCorreta = estado.desafioAtual.resposta;
-
-            if (respostaJogador === respostaCorreta) {
-                // ACERTO!
+            const correta = estado.desafioAtual.resposta;
+            if (respJogador === correta) {
                 estado.respondido = true;
-                const digitoSenha = estado.senha[estado.etapaAtual];
-                estado.descobertos[estado.etapaAtual] = digitoSenha;
+                const digito = estado.senha[estado.etapaAtual];
+                estado.descobertos[estado.etapaAtual] = digito;
                 estado.pontuacao += 100;
-                if (estado.dicasRestantes < 3 && estado.etapaAtual < estado.totalEtapas - 1) {
-                    // bônus por não usar dica
-                }
                 atualizarDisplaySlots();
                 atualizarPontuacao();
                 dom.inputResposta.classList.add('correto');
-                dom.mensagem.textContent = '✅ Correto! Dígito do cofre revelado!';
+                dom.mensagem.textContent = '✅ Correto! Dígito revelado!';
                 dom.mensagem.className = 'mensagem acerto';
                 dom.inputResposta.disabled = true;
                 dom.btnVerificar.style.display = 'none';
                 dom.btnProximo.classList.add('visivel');
-                // Animação no slot
-                const slot = document.getElementById(`slot${estado.etapaAtual}`);
-                slot.classList.add('preenchido');
-                // Girar roda do cofre
                 dom.cofreRoda.style.transform = `rotate(${360 * (estado.etapaAtual + 1)}deg)`;
-                // Verificar se completou todas as etapas
                 if (estado.descobertos.every(d => d !== null)) {
+                    pararCronometro();
                     setTimeout(abrirCofre, 800);
                 } else {
                     setTimeout(() => dom.btnProximo.focus(), 300);
                 }
             } else {
-                // ERRO
                 dom.inputResposta.classList.add('incorreto');
-                dom.mensagem.textContent = '❌ Resposta incorreta. Tente novamente!';
+                dom.mensagem.textContent = '❌ Incorreto. Tente novamente!';
                 dom.mensagem.className = 'mensagem erro';
                 dom.painelDesafio.classList.add('tremendo');
                 estado.pontuacao = Math.max(0, estado.pontuacao - 20);
@@ -915,9 +1231,9 @@
         }
 
         function usarDica() {
-            if (estado.respondido || estado.jogoConcluido) return;
+            if (estado.respondido || estado.jogoConcluido || estado.tempoRestante <= 0) return;
             if (estado.dicasRestantes <= 0) {
-                dom.mensagem.textContent = 'Sem dicas restantes! Pense bem...';
+                dom.mensagem.textContent = 'Sem dicas restantes!';
                 dom.mensagem.className = 'mensagem erro';
                 return;
             }
@@ -925,22 +1241,18 @@
             estado.pontuacao = Math.max(0, estado.pontuacao - 15);
             atualizarDicas();
             atualizarPontuacao();
-            dom.mensagem.textContent = `💡 Dica: ${estado.desafioAtual.dica}`;
+            dom.mensagem.textContent = `💡 ${estado.desafioAtual.dica}`;
             dom.mensagem.className = 'mensagem acerto';
-            // Piscar a dica
             setTimeout(() => {
-                if (dom.mensagem.textContent.includes('Dica:')) {
-                    dom.mensagem.textContent = '';
-                }
+                if (dom.mensagem.textContent.includes('💡')) dom.mensagem.textContent = '';
             }, 5000);
         }
 
         function proximaEtapa() {
-            if (!estado.respondido) return;
-            if (estado.jogoConcluido) return;
-            const proxima = estado.etapaAtual + 1;
-            if (proxima >= estado.totalEtapas) return;
-            carregarEtapa(proxima);
+            if (!estado.respondido || estado.jogoConcluido || estado.tempoRestante <= 0) return;
+            const prox = estado.etapaAtual + 1;
+            if (prox >= estado.totalEtapas) return;
+            carregarEtapa(prox);
         }
 
         function abrirCofre() {
@@ -948,14 +1260,19 @@
             dom.cofre3d.classList.add('aberto');
             dom.cofreCorpo.classList.add('abrindo');
             dom.iconeCofre.classList.add('ativo');
-            dom.mensagem.textContent = '🔓 COFRE ABERTO! Parabéns!';
+            dom.mensagem.textContent = '🔓 COFRE ABERTO!';
             dom.mensagem.className = 'mensagem acerto';
             dom.btnProximo.classList.remove('visivel');
             dom.btnVerificar.style.display = 'none';
             dom.inputResposta.disabled = true;
-            // Mostrar overlay de vitória
+            // Mostrar tempo restante na vitória
+            const tempoUsado = 420 - estado.tempoRestante;
+            const minUsados = Math.floor(tempoUsado / 60);
+            const segUsados = tempoUsado % 60;
+            dom.tempoRestanteVitoria.textContent = `⏱️ Tempo usado: ${minUsados}min ${segUsados}s | Bônus de rapidez: +${estado.tempoRestante} pts`;
+            estado.pontuacao += estado.tempoRestante; // bônus por tempo restante
+            dom.pontuacaoFinal.textContent = estado.pontuacao;
             setTimeout(() => {
-                dom.pontuacaoFinal.textContent = estado.pontuacao;
                 dom.overlayVitoria.classList.add('ativo');
                 criarConfetes();
             }, 1000);
@@ -963,19 +1280,6 @@
 
         function reiniciarJogo() {
             iniciarJogo();
-        }
-
-        function atualizarDisplaySlots() {
-            for (let i = 0; i < estado.totalEtapas; i++) {
-                const slot = document.getElementById(`slot${i}`);
-                if (estado.descobertos[i] !== null) {
-                    slot.textContent = estado.descobertos[i];
-                    slot.classList.add('preenchido');
-                } else {
-                    slot.textContent = '_';
-                    slot.classList.remove('preenchido');
-                }
-            }
         }
 
         function atualizarPontuacao() {
@@ -987,83 +1291,69 @@
         }
 
         function criarConfetes() {
-            const cores = ['#f0d078', '#ff6b6b', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd',
-            '#00d2d3', '#feca57', '#ff9f43', '#ee5a24'];
-            for (let i = 0; i < 80; i++) {
+            const cores = ['#f0d078', '#ff6b6b', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#feca57',
+            '#ff9f43', '#ee5a24'];
+            for (let i = 0; i < 100; i++) {
                 setTimeout(() => {
-                    const confete = document.createElement('div');
-                    confete.classList.add('confete');
-                    confete.style.left = Math.random() * 100 + '%';
-                    confete.style.top = -(Math.random() * 40) + 'px';
-                    confete.style.width = (Math.random() * 12 + 6) + 'px';
-                    confete.style.height = (Math.random() * 12 + 6) + 'px';
-                    confete.style.background = cores[Math.floor(Math.random() * cores.length)];
-                    confete.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-                    confete.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    confete.style.animationDelay = '0s';
-                    document.body.appendChild(confete);
-                    setTimeout(() => confete.remove(), 4000);
-                }, i * 25);
+                    const c = document.createElement('div');
+                    c.classList.add('confete');
+                    c.style.left = Math.random() * 100 + '%';
+                    c.style.top = -(Math.random() * 40) + 'px';
+                    c.style.width = (Math.random() * 12 + 6) + 'px';
+                    c.style.height = (Math.random() * 12 + 6) + 'px';
+                    c.style.background = cores[Math.floor(Math.random() * cores.length)];
+                    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    c.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 4500);
+                }, i * 20);
             }
         }
 
         function criarParticulasFundo() {
             const container = $('#particulas');
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < 30; i++) {
                 const p = document.createElement('div');
                 p.classList.add('particula');
                 p.style.left = Math.random() * 100 + '%';
                 p.style.width = (Math.random() * 4 + 2) + 'px';
                 p.style.height = p.style.width;
-                p.style.animationDuration = (Math.random() * 8 + 6) + 's';
-                p.style.animationDelay = (Math.random() * 8) + 's';
+                p.style.animationDuration = (Math.random() * 10 + 6) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
                 container.appendChild(p);
             }
         }
 
         // ==================== EVENTOS ====================
+        dom.btnComecar.addEventListener('click', () => {
+            dom.overlayInicio.classList.add('escondido');
+            dom.jogoConteudo.classList.add('ativo');
+            iniciarJogo();
+        });
 
         dom.btnVerificar.addEventListener('click', verificarResposta);
         dom.btnDica.addEventListener('click', usarDica);
         dom.btnProximo.addEventListener('click', proximaEtapa);
         dom.btnReiniciar.addEventListener('click', reiniciarJogo);
-
         dom.inputResposta.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                if (estado.respondido && dom.btnProximo.classList.contains('visivel')) {
-                    proximaEtapa();
-                } else {
-                    verificarResposta();
-                }
+                if (estado.respondido && dom.btnProximo.classList.contains('visivel')) proximaEtapa();
+                else verificarResposta();
             }
         });
-
-        // Tecla de atalho para dica (D)
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'd' && e.ctrlKey) {
-                e.preventDefault();
-                usarDica();
-            }
-            if (e.key === 'r' && e.ctrlKey) {
-                e.preventDefault();
-                reiniciarJogo();
-            }
+            if (e.key === 'd' && e.ctrlKey) { e.preventDefault();
+                usarDica(); }
+            if (e.key === 'r' && e.ctrlKey) { e.preventDefault();
+                reiniciarJogo(); }
         });
 
-        // ==================== INICIALIZAÇÃO ====================
-
-        function init() {
-            criarParticulasFundo();
-            iniciarJogo();
-        }
-
-        init();
-
-        console.log('🔐 Cofre Matemático - Semana da Matemática');
-        console.log('Resolva os 5 desafios para revelar a senha do cofre!');
-        console.log('Dica: Ctrl+D para usar dica | Ctrl+R para reiniciar');
-        console.log('Senha atual (debug):', estado.senha.join(''));
+        // Inicialização
+        criarParticulasFundo();
+        criarSlotsHTML();
+        // O jogo só começa ao clicar em "Começar desafio"
+        console.log('🔐 Cofre Matemático 3° B - Aguardando clique em "Começar desafio"...');
     </script>
 </body>
-</html>
+                                                 </html>

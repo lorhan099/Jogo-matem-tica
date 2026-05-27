@@ -2,28 +2,37 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Quiz Matematico - 3 Serie B</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Cofre Matemático 3ª Serie B- Semana da Matemática</title>
     <style>
         :root {
             --bg: #0a0a0f;
+            --cofre: #2c2c3a;
+            --metal: #4a4a5a;
             --gold: #d4a843;
             --gold-light: #f0d078;
+            --display-bg: #1a1a2e;
             --display-text: #00ff88;
             --acerto: #00e676;
             --erro: #ff3d3d;
             --dica: #ffab00;
             --btn: #3a3a50;
+            --btn-hover: #505070;
+            --text: #e0e0e0;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+            --timer-bg: #111128;
+            --timer-warn: #ff6b6b;
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0f 70%);
-            font-family: 'Segoe UI', 'JetBrains Mono', monospace;
+            font-family: 'Segoe UI', 'JetBrains Mono', 'Courier New', monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -32,165 +41,506 @@
             overflow-x: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
-            padding: 10px;
+            position: relative;
         }
+        @keyframes flutuar {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-10vh) scale(1.5) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Container principal */
         .container {
-            width: 100%;
-            max-width: 550px;
+            position: relative;
+            z-index: 1;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 15px;
+            width: 95%;
+            max-width: 650px;
+            padding: 20px 20px 0;
         }
+
+        /* Título */
         .titulo {
             text-align: center;
             color: var(--gold);
-            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
             font-weight: 900;
-            text-shadow: 0 0 25px rgba(212, 168, 67, 0.5);
+            letter-spacing: 2px;
+            text-shadow: 0 0 40px rgba(212, 168, 67, 0.5), 0 2px 8px rgba(0, 0, 0, 0.7);
+            animation: pulsar-titulo 2s ease-in-out infinite;
+            line-height: 1.3;
+        }
+        .titulo .icone {
+            font-size: 2.8rem;
+            display: block;
+            animation: tremer 0.5s ease-in-out infinite;
+            animation-play-state: paused;
+        }
+        .titulo .icone.ativo {
+            animation-play-state: running;
+        }
+        @keyframes pulsar-titulo {
+            0%,
+            100% {
+                text-shadow: 0 0 40px rgba(212, 168, 67, 0.5), 0 2px 8px rgba(0, 0, 0, 0.7);
+            }
+            50% {
+                text-shadow: 0 0 70px rgba(240, 208, 120, 0.9), 0 2px 16px rgba(0, 0, 0, 0.9);
+            }
+        }
+        @keyframes tremer {
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            15% {
+                transform: rotate(8deg);
+            }
+            30% {
+                transform: rotate(-6deg);
+            }
+            45% {
+                transform: rotate(5deg);
+            }
+            60% {
+                transform: rotate(-3deg);
+            }
+            75% {
+                transform: rotate(2deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
         }
         .subtitulo {
             color: #8888aa;
             font-size: 0.9rem;
-            text-align: center;
+            letter-spacing: 1px;
+            font-weight: 400;
         }
-        .status-bar {
+
+        /* Cronômetro */
+        .cronometro-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--timer-bg);
+            border: 2px solid #333355;
+            border-radius: 30px;
+            padding: 8px 18px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+        .cronometro-wrapper.urgente {
+            border-color: var(--timer-warn);
+            animation: piscar-timer 0.8s ease-in-out infinite;
+        }
+        @keyframes piscar-timer {
+            0%,
+            100% {
+                border-color: var(--timer-warn);
+                box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+            }
+            50% {
+                border-color: #ff3d3d;
+                box-shadow: 0 0 30px rgba(255, 61, 61, 0.8);
+            }
+        }
+        .cronometro-icone {
+            font-size: 1.4rem;
+        }
+        .cronometro-tempo {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--display-text);
+            letter-spacing: 2px;
+            min-width: 70px;
+            text-align: center;
+            text-shadow: 0 0 15px var(--display-text);
+            transition: color 0.3s;
+        }
+        .cronometro-tempo.urgente {
+            color: var(--timer-warn);
+            text-shadow: 0 0 20px var(--timer-warn);
+        }
+
+        /* Cofre visual */
+        .cofre-wrapper {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            perspective: 800px;
+        }
+        .cofre {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .cofre.aberto {
+            transform: rotateY(25deg) rotateX(-5deg) translateZ(30px);
+        }
+        .cofre-corpo {
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(145deg, #3d3d55 0%, #252535 40%, #1a1a2a 100%);
+            border-radius: 20px;
+            margin: 10px auto;
+            position: relative;
+            border: 4px solid #555570;
+            box-shadow: var(--shadow), inset 0 2px 10px rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.5s;
+            padding: 10px;
+        }
+        .cofre-corpo.abrindo {
+            border-color: var(--gold);
+            box-shadow: 0 0 60px rgba(212, 168, 67, 0.8), var(--shadow);
+            animation: brilhar-cofre 0.6s ease-out;
+        }
+        @keyframes brilhar-cofre {
+            0% {
+                box-shadow: 0 0 0px rgba(212, 168, 67, 0), var(--shadow);
+            }
+            50% {
+                box-shadow: 0 0 100px rgba(240, 208, 120, 1), var(--shadow);
+            }
+            100% {
+                box-shadow: 0 0 60px rgba(212, 168, 67, 0.8), var(--shadow);
+            }
+        }
+        .cofre-display {
+            background: var(--display-bg);
+            border-radius: 10px;
+            padding: 8px 10px;
+            border: 2px solid #333;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 100%;
+        }
+        .digito-slot {
+            width: 28px;
+            height: 40px;
+            background: #0d0d1a;
+            border-radius: 5px;
+            border: 1px solid #333;
+            color: var(--display-text);
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-shadow: 0 0 12px var(--display-text);
+            transition: all 0.3s;
+        }
+        .digito-slot.preenchido {
+            color: #fff;
+            text-shadow: 0 0 20px #fff, 0 0 40px var(--display-text);
+            border-color: var(--display-text);
+            animation: pop 0.4s ease-out;
+        }
+        @keyframes pop {
+            0% {
+                transform: scale(1.4);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .cofre-roda {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #666 0%, #333 70%);
+            border: 3px solid #777;
+            position: relative;
+            cursor: default;
+            transition: transform 0.3s;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+        }
+        .cofre-roda::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: #222;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #555;
+        }
+
+        /* Painel de desafio */
+        .painel {
+            background: linear-gradient(160deg, #1e1e32 0%, #16162a 100%);
+            border-radius: 20px;
+            padding: 18px 20px;
+            width: 100%;
+            max-width: 500px;
+            border: 2px solid #333355;
+            box-shadow: var(--shadow);
+            transition: all 0.4s;
+        }
+        .painel.tremendo {
+            animation: shake 0.5s ease-out;
+        }
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            15% {
+                transform: translateX(-8px);
+            }
+            30% {
+                transform: translateX(8px);
+            }
+            45% {
+                transform: translateX(-5px);
+            }
+            60% {
+                transform: translateX(5px);
+            }
+            75% {
+                transform: translateX(-2px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        .etapa-info {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 30px;
-            padding: 8px 16px;
-            border: 1px solid #333;
+            margin-bottom: 10px;
             flex-wrap: wrap;
             gap: 8px;
         }
-        .cronometro-geral {
-            font-family: 'JetBrains Mono', monospace;
+        .badge-etapa {
+            background: var(--gold);
+            color: #1a1a2e;
             font-weight: 900;
-            font-size: 1.2rem;
-            color: var(--display-text);
-        }
-        .vidas {
-            display: flex;
-            gap: 3px;
-        }
-        .vida {
-            font-size: 1.4rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
         }
         .pontuacao {
             color: var(--gold-light);
-            font-weight: 900;
-        }
-        .dicas-restantes {
-            color: #aaa;
-            font-size: 0.8rem;
-        }
-        .cronometro-questao {
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--display-text);
-            text-shadow: 0 0 12px var(--display-text);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 18px;
-            border-radius: 30px;
-            border: 2px solid #333;
-            align-self: center;
-            transition: color 0.3s;
-        }
-        .cronometro-questao.urgente {
-            color: var(--erro);
-            animation: piscar 0.6s infinite;
-        }
-        @keyframes piscar {
-            50% {
-                opacity: 0.5;
-            }
-        }
-        .progresso {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #ccc;
+            font-weight: bold;
             font-size: 0.9rem;
-            padding: 0 5px;
         }
-        .barra-progresso {
-            width: 100%;
-            height: 8px;
-            background: #333;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .barra-fill {
-            height: 100%;
-            background: var(--gold);
-            transition: width 0.3s;
-        }
-        .questao-box {
-            background: linear-gradient(160deg, #1e1e32, #16162a);
-            border-radius: 20px;
-            padding: 18px;
-            border: 2px solid #333;
+        .enunciado {
+            background: #111125;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 12px;
+            border: 1px solid #2a2a45;
+            min-height: 45px;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
+            align-items: center;
+            justify-content: center;
         }
-        .pergunta {
+        .enunciado-texto {
             font-size: 1.2rem;
             color: #fff;
             font-weight: 700;
-            text-align: center;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             word-break: break-word;
         }
-        .alternativas {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .tipo-desafio {
+            color: #aaa;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+            text-align: center;
         }
-        @media (max-width: 400px) {
-            .alternativas {
-                grid-template-columns: 1fr;
+        .input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .input-resposta {
+            flex: 1;
+            min-width: 100px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid #444;
+            background: #0d0d1a;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            text-align: center;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            outline: none;
+        }
+        .input-resposta:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 168, 67, 0.3);
+        }
+        .input-resposta.correto {
+            border-color: var(--acerto) !important;
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.6) !important;
+            animation: pop 0.3s ease-out;
+        }
+        .input-resposta.incorreto {
+            border-color: var(--erro) !important;
+            box-shadow: 0 0 25px rgba(255, 61, 61, 0.6) !important;
+            animation: shake 0.4s ease-out;
+        }
+        .botoes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        .btn {
+            padding: 11px 20px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:active {
+            transform: scale(0.94);
+        }
+        .btn-verificar {
+            background: var(--gold);
+            color: #1a1a2e;
+            box-shadow: 0 4px 15px rgba(212, 168, 67, 0.4);
+        }
+        .btn-verificar:hover {
+            background: var(--gold-light);
+            box-shadow: 0 6px 25px rgba(240, 208, 120, 0.6);
+        }
+        .btn-dica {
+            background: transparent;
+            color: var(--dica);
+            border: 2px solid var(--dica);
+        }
+        .btn-dica:hover {
+            background: rgba(255, 171, 0, 0.1);
+        }
+        .btn-reiniciar {
+            background: var(--btn);
+            color: #ccc;
+            border: 2px solid #555;
+        }
+        .btn-reiniciar:hover {
+            background: var(--btn-hover);
+        }
+        .btn-proximo {
+            background: var(--acerto);
+            color: #0a0a0f;
+            font-weight: 900;
+            display: none;
+        }
+        .btn-proximo.visivel {
+            display: inline-block;
+        }
+        .btn-comecar {
+            background: var(--gold);
+            color: #0a0a0f;
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 16px 40px;
+            letter-spacing: 2px;
+            box-shadow: 0 0 40px rgba(212, 168, 67, 0.7);
+            animation: pulsar-botao 1.5s ease-in-out infinite;
+        }
+        @keyframes pulsar-botao {
+            0%,
+            100% {
+                box-shadow: 0 0 40px rgba(212, 168, 67, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 70px rgba(240, 208, 120, 1), 0 0 100px rgba(212, 168, 67, 0.5);
             }
         }
-        .btn-alternativa {
-            background: var(--btn);
-            color: #fff;
-            border: 2px solid #555;
-            padding: 14px 10px;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
+        .btn-comecar:hover {
+            background: var(--gold-light);
+            transform: scale(1.05);
+        }
+        .dicas-restantes {
+            color: #888;
+            font-size: 0.78rem;
             text-align: center;
-            word-break: break-word;
-            touch-action: manipulation;
-        }
-        .btn-alternativa:active {
-            transform: scale(0.96);
-        }
-        .btn-alternativa.correta {
-            background: var(--acerto);
-            border-color: var(--acerto);
-            color: #000;
-        }
-        .btn-alternativa.incorreta {
-            background: var(--erro);
-            border-color: var(--erro);
-        }
-        .btn-alternativa:disabled {
-            pointer-events: none;
-            opacity: 0.7;
+            margin-top: 6px;
         }
         .mensagem {
             text-align: center;
             font-weight: 700;
-            min-height: 20px;
-            font-size: 0.9rem;
+            min-height: 22px;
+            margin-top: 6px;
+            transition: all 0.3s;
         }
-        .overlay {
+        .mensagem.acerto {
+            color: var(--acerto);
+        }
+        .mensagem.erro {
+            color: var(--erro);
+        }
+
+        /* Rodapé */
+        .rodape {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 15px 20px;
+            color: #666688;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            margin-top: 10px;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+        .rodape span {
+            color: var(--gold-light);
+        }
+
+        /* Overlay de início */
+        .overlay-inicio {
             position: fixed;
             top: 0;
             left: 0;
@@ -204,370 +554,778 @@
             flex-direction: column;
             gap: 20px;
         }
-        .overlay.escondido {
+        .overlay-inicio.escondido {
             display: none;
         }
-        .card {
+        .card-inicio {
             background: linear-gradient(160deg, #1e1e32, #16162a);
             border-radius: 24px;
-            padding: 25px;
+            padding: 35px 30px;
             text-align: center;
             border: 2px solid var(--gold);
-            max-width: 400px;
+            box-shadow: 0 0 60px rgba(212, 168, 67, 0.5);
+            max-width: 450px;
             width: 90%;
         }
-        .btn-reiniciar {
-            background: var(--gold);
-            color: #0a0a0f;
-            font-size: 1.3rem;
-            font-weight: 900;
-            padding: 14px 30px;
-            letter-spacing: 2px;
-            border-radius: 30px;
-            box-shadow: 0 0 30px rgba(212, 168, 67, 0.6);
-            border: none;
-            cursor: pointer;
+        .card-inicio h2 {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 10px;
         }
-        .rodape {
-            text-align: center;
-            padding: 10px;
-            color: #8888aa;
-            font-size: 0.7rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            margin-top: 10px;
+        .card-inicio p {
+            color: #ccc;
+            margin: 8px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
-        .rodape span {
+        .card-inicio .tempo-destaque {
             color: var(--gold-light);
+            font-weight: 900;
+            font-size: 1.3rem;
+        }
+
+        /* Overlay de game over (tempo esgotado) */
+        .overlay-gameover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .overlay-gameover.ativo {
+            display: flex;
+        }
+        .card-gameover {
+            background: linear-gradient(160deg, #2e1e1e, #2a1616);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid var(--erro);
+            box-shadow: 0 0 60px rgba(255, 61, 61, 0.6);
+            animation: entrada-triunfal 0.7s ease-out;
+            max-width: 420px;
+            width: 90%;
+        }
+        .card-gameover h2 {
+            font-size: 2rem;
+            color: var(--erro);
+            margin-bottom: 8px;
+        }
+        .card-gameover .emoji-gameover {
+            font-size: 5rem;
+        }
+
+        /* Tela de vitória */
+        .overlay-vitoria {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .overlay-vitoria.ativo {
+            display: flex;
+        }
+        .card-vitoria {
+            background: linear-gradient(160deg, #1e1e32, #16162a);
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 80px rgba(212, 168, 67, 0.7);
+            animation: entrada-triunfal 0.7s ease-out;
+            max-width: 420px;
+            width: 90%;
+        }
+        @keyframes entrada-triunfal {
+            0% {
+                transform: scale(0.3) rotate(-10deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.08) rotate(2deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+        .card-vitoria h2 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+        .card-vitoria .emoji-vitoria {
+            font-size: 5rem;
+            animation: bounce 0.6s ease-out infinite alternate;
+        }
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+        .card-vitoria .pontuacao-final {
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            font-weight: 900;
+        }
+
+        /* Confetes */
+        .confete {
+            position: fixed;
+            z-index: 200;
+            pointer-events: none;
+            animation: cair-confete linear forwards;
+        }
+        @keyframes cair-confete {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Conteúdo do jogo (escondido até começar) */
+        .jogo-conteudo {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .jogo-conteudo.ativo {
+            display: flex;
+        }
+
+        /* Responsivo */
+        @media (max-width: 450px) {
+            .cofre-wrapper {
+                width: 180px;
+                height: 180px;
+            }
+            .cofre-corpo {
+                width: 160px;
+                height: 160px;
+                border-radius: 16px;
+            }
+            .digito-slot {
+                width: 22px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            .cofre-roda {
+                width: 35px;
+                height: 35px;
+            }
+            .enunciado-texto {
+                font-size: 1rem;
+            }
+            .btn {
+                padding: 9px 14px;
+                font-size: 0.8rem;
+            }
+            .cronometro-tempo {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Container do jogo (inicia automaticamente) -->
-    <div class="container" id="jogoContainer">
-        <div class="titulo">❓ QUIZ MATEMATICO</div>
-        <div class="subtitulo">3 Serie B - Semana da Matematica</div>
 
-        <div class="status-bar">
-            <span class="cronometro-geral">⏱️ <span id="cronometroGeral">00:00</span></span>
-            <span class="vidas" id="vidas">❤️❤️❤️</span>
-            <span class="pontuacao">⭐ <span id="pontuacao">0</span> pts</span>
-            <span class="dicas-restantes">💡 <span id="dicasRestantes">3</span></span>
+    <!-- Overlay de início -->
+    <div class="overlay-inicio" id="overlayInicio">
+        <div class="card-inicio">
+            <div style="font-size:4rem;">🔐</div>
+            <h2>COFRE MATEMÁTICO 3ª Serie B</h2>
+            <p>Resolva <strong>10 desafios</strong> de aritmética e álgebra para revelar a senha secreta do cofre!</p>
+            <p>Você terá <span class="tempo-destaque">⏱️ 7 minutos</span> para completar todos os desafios.</p>
+            <p style="font-size:0.85rem;color:#888;">Use as dicas com sabedoria — cada uma custa pontos!</p>
+            <button class="btn btn-comecar" id="btnComecar">🚀 COMEÇAR DESAFIO</button>
         </div>
-
-        <div class="progresso">
-            <span>Questao <span id="qAtual">1</span>/10</span>
-        </div>
-        <div class="barra-progresso">
-            <div class="barra-fill" id="barraFill" style="width:0%"></div>
-        </div>
-
-        <div class="cronometro-questao" id="cronometroQuestao">01:00</div>
-
-        <div class="questao-box">
-            <div class="pergunta" id="pergunta">Carregando...</div>
-            <div class="alternativas" id="alternativas"></div>
-            <div class="mensagem" id="mensagem"></div>
-        </div>
-
-        <footer class="rodape">
-            3 Serie B | <span>Algebra In Foco 2k26</span> | Adalgisa Bonfim Soares
-        </footer>
     </div>
 
-    <!-- Tela de resultado final (inicia escondida) -->
-    <div class="overlay escondido" id="telaResultado">
-        <div class="card">
-            <div style="font-size:4rem;" id="emojiResultado">🎉</div>
-            <h2 style="color:var(--gold);">QUIZ CONCLUIDO!</h2>
-            <p style="color:#ccc;">Pontuacao final:</p>
-            <p style="color:var(--gold-light); font-size:2rem; font-weight:900;" id="pontFinal">0</p>
-            <p style="color:#aaa;" id="msgResultado"></p>
-            <button class="btn-reiniciar" onclick="reiniciar()">JOGAR NOVAMENTE</button>
+    <!-- Container principal (conteúdo do jogo) -->
+    <div class="container">
+        <div class="jogo-conteudo" id="jogoConteudo">
+            <!-- Título -->
+            <div class="titulo">
+                <span class="icone" id="iconeCofre">🔐</span>
+                COFRE MATEMÁTICO 3ª Serie B
+                <div class="subtitulo">Semana da Matemática</div>
+            </div>
+
+            <!-- Cronômetro -->
+            <div class="cronometro-wrapper" id="cronometroWrapper">
+                <span class="cronometro-icone">⏱️</span>
+                <span class="cronometro-tempo" id="cronometroTempo">07:00</span>
+            </div>
+
+            <!-- Cofre visual -->
+            <div class="cofre-wrapper">
+                <div class="cofre" id="cofre3d">
+                    <div class="cofre-corpo" id="cofreCorpo">
+                        <div class="cofre-display" id="cofreDisplay"></div>
+                        <div class="cofre-roda" id="cofreRoda"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de desafio -->
+            <div class="painel" id="painelDesafio">
+                <div class="etapa-info">
+                    <span class="badge-etapa" id="badgeEtapa">ETAPA 1/10</span>
+                    <span class="pontuacao">⭐ <span id="pontuacao">0</span> pts</span>
+                </div>
+                <div class="tipo-desafio" id="tipoDesafio">ARITMÉTICA</div>
+                <div class="enunciado">
+                    <span class="enunciado-texto" id="enunciadoTexto">Calcule: 27 + 15</span>
+                </div>
+                <div class="input-area">
+                    <input type="number" class="input-resposta" id="inputResposta" placeholder="Sua resposta" autocomplete="off">
+                    <button class="btn btn-verificar" id="btnVerificar">✓ Verificar</button>
+                </div>
+                <div class="botoes">
+                    <button class="btn btn-dica" id="btnDica">💡 Dica</button>
+                    <button class="btn btn-proximo" id="btnProximo">▶ Próximo desafio</button>
+                    <button class="btn btn-reiniciar" id="btnReiniciar">🔄 Reiniciar</button>
+                </div>
+                <div class="dicas-restantes" id="dicasRestantes">Dicas restantes: 3</div>
+                <div class="mensagem" id="mensagem"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="rodape">
+        <span>Álgebra In Foco 2k26</span> | Adalgisa Bonfim Soares
+    </footer>
+
+    <!-- Overlay de vitória -->
+    <div class="overlay-vitoria" id="overlayVitoria">
+        <div class="card-vitoria">
+            <div class="emoji-vitoria">🎉</div>
+            <h2>COFRE ABERTO!</h2>
+            <p style="color:#ccc;">Você desvendou todos os 10 segredos matemáticos!</p>
+            <p class="pontuacao-final">⭐ <span id="pontuacaoFinal">0</span> pontos</p>
+            <p style="color:#aaa;font-size:0.85rem;" id="tempoRestanteVitoria"></p>
+            <p style="color:#aaa;font-size:0.85rem;">A matemática é a chave para todos os mistérios! 🔑</p>
+            <button class="btn btn-verificar" style="margin-top:16px;" onclick="reiniciarJogo()">🔄 Jogar Novamente</button>
+        </div>
+    </div>
+
+    <!-- Overlay de game over (tempo esgotado) -->
+    <div class="overlay-gameover" id="overlayGameOver">
+        <div class="card-gameover">
+            <div class="emoji-gameover">⏰</div>
+            <h2>TEMPO ESGOTADO!</h2>
+            <p style="color:#ccc;">O cronômetro de 7 minutos acabou!</p>
+            <p style="color:#ff6b6b;font-weight:700;">Você conseguiu revelar <span id="etapasConcluidasGameOver">0</span> de 10 dígitos.</p>
+            <button class="btn btn-verificar" style="margin-top:16px;background:#ff6b6b;color:#fff;" onclick="reiniciarJogo()">🔄 Tentar Novamente</button>
         </div>
     </div>
 
     <script>
+       
+
         const estado = {
-            questaoAtual: 0,
-            totalQuestoes: 10,
+            etapaAtual: 0,
+            totalEtapas: 10,
+            senha: [],
+            descobertos: Array(10).fill(null),
             pontuacao: 0,
-            tempoRestanteQuestao: 60,
-            timerQuestao: null,
-            respondida: false,
-            quizAcabou: false,
-            questoes: [],
-            vidas: 3,
-            dicasRestantes: 3
+            dicasRestantes: 3,
+            jogoConcluido: false,
+            desafioAtual: null,
+            respondido: false,
+            tempoRestante: 420, // 7 minutos em segundos
+            timerAtivo: false,
+            timerInterval: null,
         };
 
-        const $ = id => document.getElementById(id);
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => document.querySelectorAll(sel);
+
         const dom = {
-            jogoContainer: $('jogoContainer'),
-            cronometroGeral: $('cronometroGeral'),
-            qAtual: $('qAtual'),
-            pontuacao: $('pontuacao'),
-            barraFill: $('barraFill'),
-            cronometroQuestao: $('cronometroQuestao'),
-            pergunta: $('pergunta'),
-            alternativas: $('alternativas'),
-            mensagem: $('mensagem'),
-            pontFinal: $('pontFinal'),
-            msgResultado: $('msgResultado'),
-            emojiResultado: $('emojiResultado'),
-            vidas: $('vidas'),
-            dicasRestantes: $('dicasRestantes'),
-            telaResultado: $('telaResultado')
+            overlayInicio: $('#overlayInicio'),
+            btnComecar: $('#btnComecar'),
+            jogoConteudo: $('#jogoConteudo'),
+            iconeCofre: $('#iconeCofre'),
+            cofre3d: $('#cofre3d'),
+            cofreCorpo: $('#cofreCorpo'),
+            cofreRoda: $('#cofreRoda'),
+            cofreDisplay: $('#cofreDisplay'),
+            cronometroWrapper: $('#cronometroWrapper'),
+            cronometroTempo: $('#cronometroTempo'),
+            badgeEtapa: $('#badgeEtapa'),
+            pontuacao: $('#pontuacao'),
+            tipoDesafio: $('#tipoDesafio'),
+            enunciadoTexto: $('#enunciadoTexto'),
+            inputResposta: $('#inputResposta'),
+            btnVerificar: $('#btnVerificar'),
+            btnDica: $('#btnDica'),
+            btnProximo: $('#btnProximo'),
+            btnReiniciar: $('#btnReiniciar'),
+            dicasRestantes: $('#dicasRestantes'),
+            mensagem: $('#mensagem'),
+            painelDesafio: $('#painelDesafio'),
+            overlayVitoria: $('#overlayVitoria'),
+            pontuacaoFinal: $('#pontuacaoFinal'),
+            tempoRestanteVitoria: $('#tempoRestanteVitoria'),
+            overlayGameOver: $('#overlayGameOver'),
+            etapasConcluidasGameOver: $('#etapasConcluidasGameOver'),
         };
+
+        
 
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        function embaralharArray(arr) {
-            const a = [...arr];
-            for (let i = a.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
-            return a;
+        function gerarAritmetica() {
+            const tipos = [
+                () => { const a = rand(15, 80); const b = rand(10, 70); return { expr: `${a} + ${b}`, resp: a + b }; },
+                () => { const a = rand(30, 100); const b = rand(10, a - 5); return { expr: `${a} - ${b}`, resp: a - b }; },
+                () => { const a = rand(3, 15); const b = rand(3, 12); return { expr: `${a} × ${b}`, resp: a * b }; },
+                () => { const b = rand(2, 9); const resp = rand(3, 15); const a = b * resp; return { expr: `${a} ÷ ${b}`,
+                        resp: resp }; },
+                () => { const a = rand(10, 60); const b = rand(10, 60); const soma = a + b; return { expr: `Média de ${a} e ${b}`,
+                        resp: Math.round(soma / 2) }; },
+                () => { const n = rand(8, 30);
+                    const mult = rand(2, 3); return { expr: `${mult} × ${n}`, resp: mult * n }; },
+            ];
+            const t = tipos[rand(0, tipos.length - 1)]();
+            return { tipo: 'ARITMÉTICA', enunciado: `Calcule: ${t.expr}`, resposta: t.resp, dica: 'Realize a operação indicada.' };
         }
 
-        function gerarQuestaoSoma() {
-            const a = rand(10, 80),
-                b = rand(10, 70);
-            return { pergunta: `Quanto e ${a} + ${b}?`, respostaCorreta: a + b, tipo: 'soma' };
+        function gerarExpressao() {
+            const padroes = [
+                () => { const a = rand(2, 9); const b = rand(2, 9); const c = rand(2, 6); return { expr: `(${a} + ${b}) × ${c}`,
+                        resp: (a + b) * c }; },
+                () => { const a = rand(10, 30); const b = rand(2, 7); const c = rand(2, 5); return { expr: `${a} - ${b} × ${c}`,
+                        resp: a - b * c }; },
+                () => { const a = rand(3, 9); const b = rand(2, 6); const c = rand(3, 8); return { expr: `${a} × ${b} + ${c}`,
+                        resp: a * b + c }; },
+                () => { const a = rand(20, 50); const b = rand(2, 6); const c = rand(2, 5); return { expr: `${a} ÷ ${b} + ${c}`,
+                        resp: Math.floor(a / b) + c }; },
+                () => { const a = rand(5, 12); const b = rand(3, 7); const c = rand(1, 4); return { expr: `(${a} - ${b}) × ${c} + 2`,
+                        resp: (a - b) * c + 2 }; },
+            ];
+            const p = padroes[rand(0, padroes.length - 1)]();
+            return { tipo: 'EXPRESSÃO NUMÉRICA', enunciado: `Resolva: ${p.expr}`, resposta: p.resp,
+                dica: 'Ordem: parênteses → multiplicação/divisão → soma/subtração.' };
         }
 
-        function gerarQuestaoSubtracao() {
-            const a = rand(30, 100),
-                b = rand(5, a - 5);
-            return { pergunta: `Quanto e ${a} - ${b}?`, respostaCorreta: a - b, tipo: 'sub' };
+        function gerarEquacao() {
+            const x = rand(2, 15);
+            const a = rand(2, 7);
+            const b = rand(2, 20);
+            const variantes = [
+                { expr: `${a}x + ${b} = ${a * x + b}`, resp: x },
+                { expr: `${a}x - ${b} = ${a * x - b}`, resp: x },
+                { expr: `${a + 1}x + ${b} = ${(a + 1) * x + b}`, resp: x },
+            ];
+            const v = variantes[rand(0, variantes.length - 1)];
+            return { tipo: 'EQUAÇÃO ALGÉBRICA', enunciado: `Encontre x: ${v.expr}`, resposta: v.resp,
+                dica: 'Isole o termo com x e depois divida pelo coeficiente.' };
         }
 
-        function gerarQuestaoMultiplicacao() {
-            const a = rand(2, 12),
-                b = rand(2, 10);
-            return { pergunta: `Quanto e ${a} x ${b}?`, respostaCorreta: a * b, tipo: 'multi' };
+        function gerarSequencia() {
+            const padroes = [
+                { seq: [2, 4, 6, 8, 10], resp: 12, desc: 'PA razão +2' },
+                { seq: [3, 6, 9, 12, 15], resp: 18, desc: 'PA razão +3' },
+                { seq: [1, 4, 9, 16, 25], resp: 36, desc: 'Quadrados perfeitos (n²)' },
+                { seq: [2, 4, 8, 16, 32], resp: 64, desc: 'Potências de 2' },
+                { seq: [1, 1, 2, 3, 5], resp: 8, desc: 'Sequência de Fibonacci' },
+                { seq: [20, 17, 14, 11, 8], resp: 5, desc: 'PA razão -3' },
+                { seq: [1, 3, 6, 10, 15], resp: 21, desc: 'Números triangulares' },
+                { seq: [5, 10, 20, 40, 80], resp: 160, desc: 'Multiplicação por 2' },
+            ];
+            const p = padroes[rand(0, padroes.length - 1)];
+            return { tipo: 'SEQUÊNCIA/PADRÃO', enunciado: `Próximo número: ${p.seq.join(', ')} , ?`, resposta: p.resp,
+                dica: `Padrão: ${p.desc}.` };
         }
 
-        function gerarQuestaoDivisao() {
-            const divisor = rand(2, 9),
-                quociente = rand(3, 12);
-            return { pergunta: `Quanto e ${divisor * quociente} / ${divisor}?`, respostaCorreta: quociente, tipo: 'div' };
-        }
-
-        function gerarQuestaoEquacao() {
-            const x = rand(2, 12),
-                coef = rand(2, 5),
-                termo = rand(5, 20);
-            return { pergunta: `Se ${coef}x + ${termo} = ${coef * x + termo}, qual o valor de x?`, respostaCorreta: x,
-                tipo: 'eq' };
-        }
-
-        function gerarQuestaoMMC() {
-            const a = rand(4, 15),
-                b = rand(4, 15);
+        function gerarMMC_MDC() {
+            const a = rand(6, 30);
+            const b = rand(6, 30);
             const mdc = (x, y) => { while (y) { [x, y] = [y, x % y]; } return x; };
-            return { pergunta: `Qual o MMC de ${a} e ${b}?`, respostaCorreta: (a * b) / mdc(a, b), tipo: 'mmc' };
+            const mmc = (x, y) => (x * y) / mdc(x, y);
+            const tipo = rand(0, 1);
+            if (tipo === 0) return { tipo: 'MMC', enunciado: `MMC(${a}, ${b})`, resposta: mmc(a, b),
+                dica: 'Decomponha em fatores primos.' };
+            else return { tipo: 'MDC', enunciado: `MDC(${a}, ${b})`, resposta: mdc(a, b),
+                dica: 'Liste os divisores comuns e escolha o maior.' };
         }
 
-        function gerarQuestaoPorcentagem() {
-            const valor = rand(50, 200),
-                perc = rand(10, 40);
-            return { pergunta: `Quanto e ${perc}% de ${valor}?`, respostaCorreta: Math.round(valor * perc / 100),
-            tipo: 'pct' };
+        function gerarPotenciaRaiz() {
+            const base = rand(2, 7);
+            const exp = rand(2, 4);
+            const potencia = Math.pow(base, exp);
+            const tipo = rand(0, 1);
+            if (tipo === 0) return { tipo: 'POTENCIAÇÃO', enunciado: `${base} ^ ${exp} = ?`, resposta: potencia,
+                dica: 'Multiplique a base por ela mesma várias vezes.' };
+            else { const raiz = rand(2, 12); return { tipo: 'RAIZ QUADRADA', enunciado: `√${raiz * raiz} = ?`, resposta: raiz,
+                    dica: 'Qual número vezes ele mesmo dá esse valor?' }; }
         }
 
-        function gerarQuestaoPotencia() {
-            const base = rand(2, 6),
-                exp = rand(2, 4);
-            return { pergunta: `Quanto e ${base} elevado a ${exp}?`, respostaCorreta: Math.pow(base, exp), tipo: 'pot' };
+        function gerarPorcentagem() {
+            const valor = rand(50, 300);
+            const perc = rand(10, 50);
+            const resultado = Math.round((valor * perc) / 100);
+            return { tipo: 'PORCENTAGEM', enunciado: `${perc}% de ${valor}`, resposta: resultado,
+                dica: 'Multiplique o valor pela porcentagem e divida por 100.' };
         }
 
-        function gerarQuestaoRaiz() {
-            const raiz = rand(2, 12);
-            return { pergunta: `Qual a raiz quadrada de ${raiz * raiz}?`, respostaCorreta: raiz, tipo: 'raiz' };
-        }
-
-        function gerarQuestaoSequencia() {
-            const sequencias = [
-                { seq: '2, 4, 6, 8', resposta: 10 },
-                { seq: '3, 6, 9, 12', resposta: 15 },
-                { seq: '1, 4, 9, 16', resposta: 25 },
-                { seq: '2, 4, 8, 16', resposta: 32 },
-                { seq: '1, 1, 2, 3, 5', resposta: 8 }
+        function gerarDesafioAleatorio() {
+            const geradores = [
+                gerarAritmetica,
+                gerarExpressao,
+                gerarEquacao,
+                gerarSequencia,
+                gerarMMC_MDC,
+                gerarPotenciaRaiz,
+                gerarPorcentagem,
             ];
-            const e = sequencias[rand(0, sequencias.length - 1)];
-            return { pergunta: `Qual o proximo numero: ${e.seq}, ?`, respostaCorreta: e.resposta, tipo: 'seq' };
-        }
-
-        function gerarQuestaoAleatoria() {
-            const geradores = [gerarQuestaoSoma, gerarQuestaoSubtracao, gerarQuestaoMultiplicacao, gerarQuestaoDivisao,
-                gerarQuestaoEquacao, gerarQuestaoMMC, gerarQuestaoPorcentagem, gerarQuestaoPotencia, gerarQuestaoRaiz,
-                gerarQuestaoSequencia
-            ];
-            return geradores[rand(0, geradores.length - 1)]();
-        }
-
-        function gerarAlternativas(respostaCorreta, tipo) {
-            const alternativas = new Set();
-            alternativas.add(respostaCorreta);
-            while (alternativas.size < 4) {
-                let errada = tipo === 'seq' ? respostaCorreta + rand(-5, 5) : respostaCorreta + rand(-20, 20);
-                if (errada !== respostaCorreta && errada > 0 && !alternativas.has(errada)) alternativas.add(errada);
+            const selecionado = geradores[rand(0, geradores.length - 1)]();
+            if (!Number.isInteger(selecionado.resposta) || selecionado.resposta < 0 || selecionado.resposta > 999) {
+                return gerarAritmetica();
             }
-            return embaralharArray(Array.from(alternativas));
+            return selecionado;
         }
+
 
         function formatarTempo(segundos) {
-            const min = Math.floor(segundos / 60),
-                seg = segundos % 60;
+            const min = Math.floor(segundos / 60);
+            const seg = segundos % 60;
             return `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
         }
 
-        function atualizarCronometroQuestao() {
-            dom.cronometroQuestao.textContent = formatarTempo(estado.tempoRestanteQuestao);
-            dom.cronometroQuestao.classList.toggle('urgente', estado.tempoRestanteQuestao <= 10);
+        function atualizarDisplayCronometro() {
+            dom.cronometroTempo.textContent = formatarTempo(estado.tempoRestante);
+            // Efeitos visuais de urgência
+            if (estado.tempoRestante <= 60) {
+                dom.cronometroTempo.classList.add('urgente');
+                dom.cronometroWrapper.classList.add('urgente');
+            } else {
+                dom.cronometroTempo.classList.remove('urgente');
+                dom.cronometroWrapper.classList.remove('urgente');
+            }
         }
 
-        function iniciarTimerQuestao() {
-            estado.tempoRestanteQuestao = 60;
-            atualizarCronometroQuestao();
-            if (estado.timerQuestao) clearInterval(estado.timerQuestao);
-            estado.timerQuestao = setInterval(() => {
-                estado.tempoRestanteQuestao--;
-                atualizarCronometroQuestao();
-                if (estado.tempoRestanteQuestao <= 0) {
-                    clearInterval(estado.timerQuestao);
-                    if (!estado.respondida && !estado.quizAcabou) tempoEsgotadoQuestao();
+        function iniciarCronometro() {
+            estado.tempoRestante = 420; // 7 minutos
+            estado.timerAtivo = true;
+            atualizarDisplayCronometro();
+            if (estado.timerInterval) clearInterval(estado.timerInterval);
+            estado.timerInterval = setInterval(() => {
+                estado.tempoRestante--;
+                atualizarDisplayCronometro();
+                if (estado.tempoRestante <= 0) {
+                    clearInterval(estado.timerInterval);
+                    estado.timerAtivo = false;
+                    tempoEsgotado();
                 }
             }, 1000);
         }
 
-        function pararTimerQuestao() {
-            if (estado.timerQuestao) { clearInterval(estado.timerQuestao);
-                estado.timerQuestao = null; }
-        }
-
-        function tempoEsgotadoQuestao() {
-            if (estado.respondida) return;
-            estado.respondida = true;
-            pararTimerQuestao();
-            const botoes = document.querySelectorAll('.btn-alternativa');
-            botoes.forEach(btn => {
-                btn.disabled = true;
-                if (parseInt(btn.dataset.valor) === estado.questoes[estado.questaoAtual].respostaCorreta) btn
-                    .classList.add('correta');
-            });
-            dom.mensagem.innerHTML = '⏰ Tempo esgotado!';
-            dom.mensagem.style.color = 'var(--erro)';
-            estado.vidas--;
-            atualizarVidas();
-            if (estado.vidas <= 0) setTimeout(finalizarQuiz, 1500);
-            else setTimeout(proximaQuestao, 1500);
-        }
-
-        function atualizarVidas() {
-            dom.vidas.innerHTML = '❤️'.repeat(estado.vidas) + '🖤'.repeat(3 - estado.vidas);
-        }
-
-        function mostrarQuestao() {
-            if (estado.questaoAtual >= estado.totalQuestoes || estado.quizAcabou) { finalizarQuiz(); return; }
-            estado.respondida = false;
-            const questao = estado.questoes[estado.questaoAtual];
-            dom.pergunta.textContent = questao.pergunta;
-            dom.alternativas.innerHTML = '';
-            questao.alternativas.forEach(valor => {
-                const btn = document.createElement('button');
-                btn.className = 'btn-alternativa';
-                btn.textContent = valor;
-                btn.dataset.valor = valor;
-                btn.addEventListener('click', () => selecionarResposta(valor));
-                dom.alternativas.appendChild(btn);
-            });
-            dom.mensagem.textContent = '';
-            dom.qAtual.textContent = estado.questaoAtual + 1;
-            dom.barraFill.style.width = ((estado.questaoAtual) / estado.totalQuestoes * 100) + '%';
-            iniciarTimerQuestao();
-        }
-
-        function selecionarResposta(valorEscolhido) {
-            if (estado.respondida || estado.quizAcabou) return;
-            estado.respondida = true;
-            pararTimerQuestao();
-            const questao = estado.questoes[estado.questaoAtual];
-            const botoes = document.querySelectorAll('.btn-alternativa');
-            botoes.forEach(btn => {
-                btn.disabled = true;
-                if (parseInt(btn.dataset.valor) === questao.respostaCorreta) btn.classList.add('correta');
-            });
-            const btnEscolhido = Array.from(botoes).find(b => parseInt(b.dataset.valor) === valorEscolhido);
-            if (valorEscolhido === questao.respostaCorreta) {
-                const pontosGanhos = Math.floor(900 * (estado.tempoRestanteQuestao / 60));
-                estado.pontuacao += pontosGanhos;
-                dom.pontuacao.textContent = estado.pontuacao;
-                dom.mensagem.innerHTML = `✅ Correto! +${pontosGanhos} pts`;
-                dom.mensagem.style.color = 'var(--acerto)';
-            } else {
-                if (btnEscolhido) btnEscolhido.classList.add('incorreta');
-                estado.vidas--;
-                atualizarVidas();
-                dom.mensagem.innerHTML = '❌ Errado!';
-                dom.mensagem.style.color = 'var(--erro)';
-                if (estado.vidas <= 0) { setTimeout(finalizarQuiz, 1500); return; }
+        function pararCronometro() {
+            if (estado.timerInterval) {
+                clearInterval(estado.timerInterval);
+                estado.timerInterval = null;
             }
-            setTimeout(proximaQuestao, 1500);
+            estado.timerAtivo = false;
         }
 
-        function proximaQuestao() {
-            estado.questaoAtual++;
-            if (estado.questaoAtual >= estado.totalQuestoes) finalizarQuiz();
-            else mostrarQuestao();
+        function tempoEsgotado() {
+            if (estado.jogoConcluido) return;
+            estado.jogoConcluido = true;
+            pararCronometro();
+            dom.inputResposta.disabled = true;
+            dom.btnVerificar.style.display = 'none';
+            dom.btnProximo.classList.remove('visivel');
+            // Contar etapas concluídas
+            const concluidas = estado.descobertos.filter(d => d !== null).length;
+            dom.etapasConcluidasGameOver.textContent = concluidas;
+            dom.overlayGameOver.classList.add('ativo');
+            dom.mensagem.textContent = '⏰ Tempo esgotado!';
+            dom.mensagem.className = 'mensagem erro';
         }
 
-        function finalizarQuiz() {
-            estado.quizAcabou = true;
-            pararTimerQuestao();
-            dom.telaResultado.classList.remove('escondido');
-            dom.pontFinal.textContent = estado.pontuacao;
-            if (estado.pontuacao >= 7000) {
-                dom.emojiResultado.textContent = '🏆';
-                dom.msgResultado.textContent = 'Excelente! Voce e um mestre da matematica!';
-            } else if (estado.pontuacao >= 4000) {
-                dom.emojiResultado.textContent = '🎉';
-                dom.msgResultado.textContent = 'Muito bom! Continue praticando.';
-            } else {
-                dom.emojiResultado.textContent = '📚';
-                dom.msgResultado.textContent = 'Estude mais e tente novamente!';
+
+        function gerarSenha() {
+            const s = [];
+            for (let i = 0; i < estado.totalEtapas; i++) s.push(rand(0, 9));
+            return s;
+        }
+
+        function criarSlotsHTML() {
+            dom.cofreDisplay.innerHTML = '';
+            for (let i = 0; i < estado.totalEtapas; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'digito-slot';
+                slot.id = `slot${i}`;
+                slot.textContent = '_';
+                dom.cofreDisplay.appendChild(slot);
             }
         }
 
-        function reiniciar() {
-            estado.questaoAtual = 0;
+        function atualizarDisplaySlots() {
+            for (let i = 0; i < estado.totalEtapas; i++) {
+                const slot = document.getElementById(`slot${i}`);
+                if (slot) {
+                    if (estado.descobertos[i] !== null) {
+                        slot.textContent = estado.descobertos[i];
+                        slot.classList.add('preenchido');
+                    } else {
+                        slot.textContent = '_';
+                        slot.classList.remove('preenchido');
+                    }
+                }
+            }
+        }
+
+        function iniciarJogo() {
+            estado.etapaAtual = 0;
+            estado.senha = gerarSenha();
+            estado.descobertos = Array(10).fill(null);
             estado.pontuacao = 0;
-            estado.vidas = 3;
             estado.dicasRestantes = 3;
-            estado.respondida = false;
-            estado.quizAcabou = false;
-            estado.questoes = [];
-            for (let i = 0; i < estado.totalQuestoes; i++) {
-                const q = gerarQuestaoAleatoria();
-                estado.questoes.push({
-                    pergunta: q.pergunta,
-                    respostaCorreta: q.respostaCorreta,
-                    alternativas: gerarAlternativas(q.respostaCorreta, q.tipo)
-                });
-            }
-            dom.pontuacao.textContent = '0';
-            dom.barraFill.style.width = '0%';
-            atualizarVidas();
-            dom.dicasRestantes.textContent = estado.dicasRestantes;
-            dom.telaResultado.classList.add('escondido');
-            mostrarQuestao();
+            estado.jogoConcluido = false;
+            estado.respondido = false;
+            criarSlotsHTML();
+            atualizarDisplaySlots();
+            atualizarPontuacao();
+            atualizarDicas();
+            dom.mensagem.textContent = '';
+            dom.mensagem.className = 'mensagem';
+            dom.btnProximo.classList.remove('visivel');
+            dom.inputResposta.disabled = false;
+            dom.inputResposta.value = '';
+            dom.inputResposta.className = 'input-resposta';
+            dom.btnVerificar.style.display = 'inline-block';
+            dom.overlayVitoria.classList.remove('ativo');
+            dom.overlayGameOver.classList.remove('ativo');
+            dom.cofre3d.classList.remove('aberto');
+            dom.cofreCorpo.classList.remove('abrindo');
+            dom.iconeCofre.classList.remove('ativo');
+            dom.painelDesafio.classList.remove('tremendo');
+            dom.cronometroTempo.classList.remove('urgente');
+            dom.cronometroWrapper.classList.remove('urgente');
+            pararCronometro();
+            iniciarCronometro();
+            carregarEtapa(0);
+            setTimeout(() => dom.inputResposta.focus(), 400);
+            console.log('🔐 Senha do cofre (debug):', estado.senha.join(''));
         }
 
-        // Iniciar automaticamente
-        reiniciar();
+        function carregarEtapa(indice) {
+            estado.etapaAtual = indice;
+            estado.respondido = false;
+            estado.desafioAtual = gerarDesafioAleatorio();
+            dom.badgeEtapa.textContent = `ETAPA ${indice + 1}/${estado.totalEtapas}`;
+            dom.tipoDesafio.textContent = estado.desafioAtual.tipo;
+            dom.enunciadoTexto.textContent = estado.desafioAtual.enunciado;
+            dom.inputResposta.value = '';
+            dom.inputResposta.disabled = false;
+            dom.inputResposta.className = 'input-resposta';
+            dom.mensagem.textContent = '';
+            dom.mensagem.className = 'mensagem';
+            dom.btnProximo.classList.remove('visivel');
+            dom.btnVerificar.style.display = 'inline-block';
+            dom.painelDesafio.classList.remove('tremendo');
+            setTimeout(() => dom.inputResposta.focus(), 300);
+        }
+
+        function verificarResposta() {
+            if (estado.respondido || estado.jogoConcluido || estado.tempoRestante <= 0) return;
+            const valor = dom.inputResposta.value.trim();
+            if (valor === '') {
+                dom.mensagem.textContent = 'Digite uma resposta!';
+                dom.mensagem.className = 'mensagem erro';
+                return;
+            }
+            const respJogador = parseInt(valor, 10);
+            if (isNaN(respJogador)) {
+                dom.mensagem.textContent = 'Resposta inválida!';
+                dom.mensagem.className = 'mensagem erro';
+                return;
+            }
+            const correta = estado.desafioAtual.resposta;
+            if (respJogador === correta) {
+                estado.respondido = true;
+                const digito = estado.senha[estado.etapaAtual];
+                estado.descobertos[estado.etapaAtual] = digito;
+                estado.pontuacao += 100;
+                atualizarDisplaySlots();
+                atualizarPontuacao();
+                dom.inputResposta.classList.add('correto');
+                dom.mensagem.textContent = '✅ Correto! Dígito revelado!';
+                dom.mensagem.className = 'mensagem acerto';
+                dom.inputResposta.disabled = true;
+                dom.btnVerificar.style.display = 'none';
+                dom.btnProximo.classList.add('visivel');
+                dom.cofreRoda.style.transform = `rotate(${360 * (estado.etapaAtual + 1)}deg)`;
+                if (estado.descobertos.every(d => d !== null)) {
+                    pararCronometro();
+                    setTimeout(abrirCofre, 800);
+                } else {
+                    setTimeout(() => dom.btnProximo.focus(), 300);
+                }
+            } else {
+                dom.inputResposta.classList.add('incorreto');
+                dom.mensagem.textContent = '❌ Incorreto. Tente novamente!';
+                dom.mensagem.className = 'mensagem erro';
+                dom.painelDesafio.classList.add('tremendo');
+                estado.pontuacao = Math.max(0, estado.pontuacao - 20);
+                atualizarPontuacao();
+                setTimeout(() => {
+                    dom.inputResposta.classList.remove('incorreto');
+                    dom.painelDesafio.classList.remove('tremendo');
+                }, 500);
+                dom.inputResposta.select();
+            }
+        }
+
+        function usarDica() {
+            if (estado.respondido || estado.jogoConcluido || estado.tempoRestante <= 0) return;
+            if (estado.dicasRestantes <= 0) {
+                dom.mensagem.textContent = 'Sem dicas restantes!';
+                dom.mensagem.className = 'mensagem erro';
+                return;
+            }
+            estado.dicasRestantes--;
+            estado.pontuacao = Math.max(0, estado.pontuacao - 15);
+            atualizarDicas();
+            atualizarPontuacao();
+            dom.mensagem.textContent = `💡 ${estado.desafioAtual.dica}`;
+            dom.mensagem.className = 'mensagem acerto';
+            setTimeout(() => {
+                if (dom.mensagem.textContent.includes('💡')) dom.mensagem.textContent = '';
+            }, 5000);
+        }
+
+        function proximaEtapa() {
+            if (!estado.respondido || estado.jogoConcluido || estado.tempoRestante <= 0) return;
+            const prox = estado.etapaAtual + 1;
+            if (prox >= estado.totalEtapas) return;
+            carregarEtapa(prox);
+        }
+
+        function abrirCofre() {
+            estado.jogoConcluido = true;
+            dom.cofre3d.classList.add('aberto');
+            dom.cofreCorpo.classList.add('abrindo');
+            dom.iconeCofre.classList.add('ativo');
+            dom.mensagem.textContent = '🔓 COFRE ABERTO!';
+            dom.mensagem.className = 'mensagem acerto';
+            dom.btnProximo.classList.remove('visivel');
+            dom.btnVerificar.style.display = 'none';
+            dom.inputResposta.disabled = true;
+            // Mostrar tempo restante na vitória
+            const tempoUsado = 420 - estado.tempoRestante;
+            const minUsados = Math.floor(tempoUsado / 60);
+            const segUsados = tempoUsado % 60;
+            dom.tempoRestanteVitoria.textContent = `⏱️ Tempo usado: ${minUsados}min ${segUsados}s | Bônus de rapidez: +${estado.tempoRestante} pts`;
+            estado.pontuacao += estado.tempoRestante; // bônus por tempo restante
+            dom.pontuacaoFinal.textContent = estado.pontuacao;
+            setTimeout(() => {
+                dom.overlayVitoria.classList.add('ativo');
+                criarConfetes();
+            }, 1000);
+        }
+
+        function reiniciarJogo() {
+            iniciarJogo();
+        }
+
+        function atualizarPontuacao() {
+            dom.pontuacao.textContent = estado.pontuacao;
+        }
+
+        function atualizarDicas() {
+            dom.dicasRestantes.textContent = `Dicas restantes: ${estado.dicasRestantes}`;
+        }
+
+        function criarConfetes() {
+            const cores = ['#f0d078', '#ff6b6b', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#feca57',
+            '#ff9f43', '#ee5a24'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const c = document.createElement('div');
+                    c.classList.add('confete');
+                    c.style.left = Math.random() * 100 + '%';
+                    c.style.top = -(Math.random() * 40) + 'px';
+                    c.style.width = (Math.random() * 12 + 6) + 'px';
+                    c.style.height = (Math.random() * 12 + 6) + 'px';
+                    c.style.background = cores[Math.floor(Math.random() * cores.length)];
+                    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    c.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 4500);
+                }, i * 20);
+            }
+        }
+
+        function criarParticulasFundo() {
+            const container = $('#particulas');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particula');
+                p.style.left = Math.random() * 100 + '%';
+                p.style.width = (Math.random() * 4 + 2) + 'px';
+                p.style.height = p.style.width;
+                p.style.animationDuration = (Math.random() * 10 + 6) + 's';
+                p.style.animationDelay = (Math.random() * 10) + 's';
+                container.appendChild(p);
+            }
+        }
+
+        dom.btnComecar.addEventListener('click', () => {
+            dom.overlayInicio.classList.add('escondido');
+            dom.jogoConteudo.classList.add('ativo');
+            iniciarJogo();
+        });
+
+        dom.btnVerificar.addEventListener('click', verificarResposta);
+        dom.btnDica.addEventListener('click', usarDica);
+        dom.btnProximo.addEventListener('click', proximaEtapa);
+        dom.btnReiniciar.addEventListener('click', reiniciarJogo);
+        dom.inputResposta.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (estado.respondido && dom.btnProximo.classList.contains('visivel')) proximaEtapa();
+                else verificarResposta();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'd' && e.ctrlKey) { e.preventDefault();
+                usarDica(); }
+            if (e.key === 'r' && e.ctrlKey) { e.preventDefault();
+                reiniciarJogo(); }
+        });
+        criarSlotsHTML();
+        console.log('🔐 Cofre Matemático 3ª Serie B - Aguardando clique em "Começar desafio"...');
     </script>
 </body>
-</html>
+                                                 </html>

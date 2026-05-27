@@ -14,8 +14,6 @@
             --erro: #ff3d3d;
             --dica: #ffab00;
             --btn: #3a3a50;
-            --btn-hover: #505070;
-            --text: #e0e0e0;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
         }
         * {
@@ -35,35 +33,26 @@
             user-select: none;
             -webkit-tap-highlight-color: transparent;
             padding: 10px;
-            position: relative;
         }
-        /* Container principal do jogo */
         .container {
             width: 100%;
             max-width: 550px;
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 15px;
-            z-index: 1;
         }
-        .container.ativo {
-            display: flex;
-        }
-        /* Títulos */
         .titulo {
             text-align: center;
             color: var(--gold);
             font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: 900;
             text-shadow: 0 0 25px rgba(212, 168, 67, 0.5);
-            letter-spacing: 1px;
         }
         .subtitulo {
             color: #8888aa;
             font-size: 0.9rem;
             text-align: center;
         }
-        /* Barra de status */
         .status-bar {
             display: flex;
             justify-content: space-between;
@@ -96,7 +85,6 @@
             color: #aaa;
             font-size: 0.8rem;
         }
-        /* Cronômetro da questão */
         .cronometro-questao {
             text-align: center;
             font-family: 'JetBrains Mono', monospace;
@@ -120,7 +108,6 @@
                 opacity: 0.5;
             }
         }
-        /* Barra de progresso */
         .progresso {
             display: flex;
             justify-content: space-between;
@@ -141,7 +128,6 @@
             background: var(--gold);
             transition: width 0.3s;
         }
-        /* Caixa da questão */
         .questao-box {
             background: linear-gradient(160deg, #1e1e32, #16162a);
             border-radius: 20px;
@@ -158,7 +144,6 @@
             text-align: center;
             word-break: break-word;
         }
-        /* Alternativas */
         .alternativas {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -182,8 +167,6 @@
             text-align: center;
             word-break: break-word;
             touch-action: manipulation;
-            position: relative;
-            overflow: hidden;
         }
         .btn-alternativa:active {
             transform: scale(0.96);
@@ -201,14 +184,12 @@
             pointer-events: none;
             opacity: 0.7;
         }
-        /* Mensagem de feedback */
         .mensagem {
             text-align: center;
             font-weight: 700;
             min-height: 20px;
             font-size: 0.9rem;
         }
-        /* Overlays (telas inicial e final) */
         .overlay {
             position: fixed;
             top: 0;
@@ -234,9 +215,8 @@
             border: 2px solid var(--gold);
             max-width: 400px;
             width: 90%;
-            box-shadow: 0 0 40px rgba(212, 168, 67, 0.3);
         }
-        .btn-comecar {
+        .btn-reiniciar {
             background: var(--gold);
             color: #0a0a0f;
             font-size: 1.3rem;
@@ -245,20 +225,9 @@
             letter-spacing: 2px;
             border-radius: 30px;
             box-shadow: 0 0 30px rgba(212, 168, 67, 0.6);
-            animation: pulsar 1.5s infinite;
             border: none;
             cursor: pointer;
         }
-        @keyframes pulsar {
-            0%,
-            100% {
-                box-shadow: 0 0 30px rgba(212, 168, 67, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 60px rgba(240, 208, 120, 1);
-            }
-        }
-        /* Rodapé */
         .rodape {
             text-align: center;
             padding: 10px;
@@ -273,44 +242,18 @@
     </style>
 </head>
 <body>
-    <!-- Tela inicial -->
-    <div class="overlay" id="telaInicio">
-        <div class="card">
-            <div style="font-size:4rem;">❓</div>
-            <h2 style="color:var(--gold);">QUIZ MATEMATICO</h2>
-            <p style="color:#ccc;">10 questoes de aritmetica e algebra</p>
-            <p style="color:#ccc;">1 minuto por questao | Rapidez = mais pontos!</p>
-            <p style="color:var(--gold-light);">3 Serie B</p>
-            <button class="btn-comecar" id="btnComecar">COMECAR QUIZ</button>
-        </div>
-    </div>
-
-    <!-- Tela de resultado final -->
-    <div class="overlay escondido" id="telaResultado">
-        <div class="card">
-            <div style="font-size:4rem;" id="emojiResultado">🎉</div>
-            <h2 style="color:var(--gold);">QUIZ CONCLUIDO!</h2>
-            <p style="color:#ccc;">Pontuacao final:</p>
-            <p style="color:var(--gold-light); font-size:2rem; font-weight:900;" id="pontFinal">0</p>
-            <p style="color:#aaa;" id="msgResultado"></p>
-            <button class="btn-comecar" onclick="reiniciar()">JOGAR NOVAMENTE</button>
-        </div>
-    </div>
-
-    <!-- Container do jogo -->
+    <!-- Container do jogo (inicia automaticamente) -->
     <div class="container" id="jogoContainer">
         <div class="titulo">❓ QUIZ MATEMATICO</div>
         <div class="subtitulo">3 Serie B - Semana da Matematica</div>
 
-        <!-- Status -->
         <div class="status-bar">
             <span class="cronometro-geral">⏱️ <span id="cronometroGeral">00:00</span></span>
             <span class="vidas" id="vidas">❤️❤️❤️</span>
             <span class="pontuacao">⭐ <span id="pontuacao">0</span> pts</span>
-            <span class="dicas-restantes">💡<span id="dicasRestantes">3</span></span>
+            <span class="dicas-restantes">💡 <span id="dicasRestantes">3</span></span>
         </div>
 
-        <!-- Barra de progresso -->
         <div class="progresso">
             <span>Questao <span id="qAtual">1</span>/10</span>
         </div>
@@ -318,24 +261,32 @@
             <div class="barra-fill" id="barraFill" style="width:0%"></div>
         </div>
 
-        <!-- Cronômetro da questão -->
         <div class="cronometro-questao" id="cronometroQuestao">01:00</div>
 
-        <!-- Pergunta e alternativas -->
         <div class="questao-box">
             <div class="pergunta" id="pergunta">Carregando...</div>
             <div class="alternativas" id="alternativas"></div>
             <div class="mensagem" id="mensagem"></div>
         </div>
 
-        <!-- Rodapé -->
         <footer class="rodape">
             3 Serie B | <span>Algebra In Foco 2k26</span> | Adalgisa Bonfim Soares
         </footer>
     </div>
 
+    <!-- Tela de resultado final (inicia escondida) -->
+    <div class="overlay escondido" id="telaResultado">
+        <div class="card">
+            <div style="font-size:4rem;" id="emojiResultado">🎉</div>
+            <h2 style="color:var(--gold);">QUIZ CONCLUIDO!</h2>
+            <p style="color:#ccc;">Pontuacao final:</p>
+            <p style="color:var(--gold-light); font-size:2rem; font-weight:900;" id="pontFinal">0</p>
+            <p style="color:#aaa;" id="msgResultado"></p>
+            <button class="btn-reiniciar" onclick="reiniciar()">JOGAR NOVAMENTE</button>
+        </div>
+    </div>
+
     <script>
-        // ==================== ESTADO DO JOGO ====================
         const estado = {
             questaoAtual: 0,
             totalQuestoes: 10,
@@ -346,14 +297,11 @@
             quizAcabou: false,
             questoes: [],
             vidas: 3,
-            dicasRestantes: 3,
-            tempoTotalInicio: Date.now()
+            dicasRestantes: 3
         };
 
         const $ = id => document.getElementById(id);
         const dom = {
-            telaInicio: $('telaInicio'),
-            telaResultado: $('telaResultado'),
             jogoContainer: $('jogoContainer'),
             cronometroGeral: $('cronometroGeral'),
             qAtual: $('qAtual'),
@@ -367,10 +315,10 @@
             msgResultado: $('msgResultado'),
             emojiResultado: $('emojiResultado'),
             vidas: $('vidas'),
-            dicasRestantes: $('dicasRestantes')
+            dicasRestantes: $('dicasRestantes'),
+            telaResultado: $('telaResultado')
         };
 
-        // ==================== FUNCOES AUXILIARES ====================
         function rand(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
@@ -384,147 +332,102 @@
             return a;
         }
 
-        // ==================== GERADORES DE QUESTOES ====================
         function gerarQuestaoSoma() {
-            const a = rand(10, 80);
-            const b = rand(10, 70);
-            const respostaCorreta = a + b;
-            const pergunta = `Quanto e ${a} + ${b}?`;
-            return { pergunta, respostaCorreta, tipo: 'soma' };
+            const a = rand(10, 80),
+                b = rand(10, 70);
+            return { pergunta: `Quanto e ${a} + ${b}?`, respostaCorreta: a + b, tipo: 'soma' };
         }
 
         function gerarQuestaoSubtracao() {
-            const a = rand(30, 100);
-            const b = rand(5, a - 5);
-            const respostaCorreta = a - b;
-            const pergunta = `Quanto e ${a} - ${b}?`;
-            return { pergunta, respostaCorreta, tipo: 'sub' };
+            const a = rand(30, 100),
+                b = rand(5, a - 5);
+            return { pergunta: `Quanto e ${a} - ${b}?`, respostaCorreta: a - b, tipo: 'sub' };
         }
 
         function gerarQuestaoMultiplicacao() {
-            const a = rand(2, 12);
-            const b = rand(2, 10);
-            const respostaCorreta = a * b;
-            const pergunta = `Quanto e ${a} x ${b}?`;
-            return { pergunta, respostaCorreta, tipo: 'multi' };
+            const a = rand(2, 12),
+                b = rand(2, 10);
+            return { pergunta: `Quanto e ${a} x ${b}?`, respostaCorreta: a * b, tipo: 'multi' };
         }
 
         function gerarQuestaoDivisao() {
-            const divisor = rand(2, 9);
-            const quociente = rand(3, 12);
-            const respostaCorreta = quociente;
-            const dividendo = divisor * quociente;
-            const pergunta = `Quanto e ${dividendo} / ${divisor}?`;
-            return { pergunta, respostaCorreta, tipo: 'div' };
+            const divisor = rand(2, 9),
+                quociente = rand(3, 12);
+            return { pergunta: `Quanto e ${divisor * quociente} / ${divisor}?`, respostaCorreta: quociente, tipo: 'div' };
         }
 
         function gerarQuestaoEquacao() {
-            const x = rand(2, 12);
-            const coef = rand(2, 5);
-            const termo = rand(5, 20);
-            const respostaCorreta = x;
-            const pergunta = `Se ${coef}x + ${termo} = ${coef * x + termo}, qual o valor de x?`;
-            return { pergunta, respostaCorreta, tipo: 'eq' };
+            const x = rand(2, 12),
+                coef = rand(2, 5),
+                termo = rand(5, 20);
+            return { pergunta: `Se ${coef}x + ${termo} = ${coef * x + termo}, qual o valor de x?`, respostaCorreta: x,
+                tipo: 'eq' };
         }
 
         function gerarQuestaoMMC() {
-            const a = rand(4, 15);
-            const b = rand(4, 15);
-            const mdc = (x, y) => {
-                while (y) {
-                    [x, y] = [y, x % y];
-                }
-                return x;
-            };
-            const respostaCorreta = (a * b) / mdc(a, b);
-            const pergunta = `Qual o MMC de ${a} e ${b}?`;
-            return { pergunta, respostaCorreta, tipo: 'mmc' };
+            const a = rand(4, 15),
+                b = rand(4, 15);
+            const mdc = (x, y) => { while (y) { [x, y] = [y, x % y]; } return x; };
+            return { pergunta: `Qual o MMC de ${a} e ${b}?`, respostaCorreta: (a * b) / mdc(a, b), tipo: 'mmc' };
         }
 
         function gerarQuestaoPorcentagem() {
-            const valor = rand(50, 200);
-            const perc = rand(10, 40);
-            const respostaCorreta = Math.round(valor * perc / 100);
-            const pergunta = `Quanto e ${perc}% de ${valor}?`;
-            return { pergunta, respostaCorreta, tipo: 'pct' };
+            const valor = rand(50, 200),
+                perc = rand(10, 40);
+            return { pergunta: `Quanto e ${perc}% de ${valor}?`, respostaCorreta: Math.round(valor * perc / 100),
+            tipo: 'pct' };
         }
 
         function gerarQuestaoPotencia() {
-            const base = rand(2, 6);
-            const exp = rand(2, 4);
-            const respostaCorreta = Math.pow(base, exp);
-            const pergunta = `Quanto e ${base} elevado a ${exp}?`;
-            return { pergunta, respostaCorreta, tipo: 'pot' };
+            const base = rand(2, 6),
+                exp = rand(2, 4);
+            return { pergunta: `Quanto e ${base} elevado a ${exp}?`, respostaCorreta: Math.pow(base, exp), tipo: 'pot' };
         }
 
         function gerarQuestaoRaiz() {
             const raiz = rand(2, 12);
-            const respostaCorreta = raiz;
-            const pergunta = `Qual a raiz quadrada de ${raiz * raiz}?`;
-            return { pergunta, respostaCorreta, tipo: 'raiz' };
+            return { pergunta: `Qual a raiz quadrada de ${raiz * raiz}?`, respostaCorreta: raiz, tipo: 'raiz' };
         }
 
         function gerarQuestaoSequencia() {
             const sequencias = [
-                { seq: '2, 4, 6, 8', resposta: 10, tipo: 'PA (+2)' },
-                { seq: '3, 6, 9, 12', resposta: 15, tipo: 'PA (+3)' },
-                { seq: '1, 4, 9, 16', resposta: 25, tipo: 'Quadrados' },
-                { seq: '2, 4, 8, 16', resposta: 32, tipo: 'Dobro' },
-                { seq: '1, 1, 2, 3, 5', resposta: 8, tipo: 'Fibonacci' }
+                { seq: '2, 4, 6, 8', resposta: 10 },
+                { seq: '3, 6, 9, 12', resposta: 15 },
+                { seq: '1, 4, 9, 16', resposta: 25 },
+                { seq: '2, 4, 8, 16', resposta: 32 },
+                { seq: '1, 1, 2, 3, 5', resposta: 8 }
             ];
-            const escolhida = sequencias[rand(0, sequencias.length - 1)];
-            const pergunta = `Qual o proximo numero da sequencia: ${escolhida.seq}, ?`;
-            return { pergunta, respostaCorreta: escolhida.resposta, tipo: 'seq' };
+            const e = sequencias[rand(0, sequencias.length - 1)];
+            return { pergunta: `Qual o proximo numero: ${e.seq}, ?`, respostaCorreta: e.resposta, tipo: 'seq' };
         }
 
         function gerarQuestaoAleatoria() {
-            const geradores = [
-                gerarQuestaoSoma,
-                gerarQuestaoSubtracao,
-                gerarQuestaoMultiplicacao,
-                gerarQuestaoDivisao,
-                gerarQuestaoEquacao,
-                gerarQuestaoMMC,
-                gerarQuestaoPorcentagem,
-                gerarQuestaoPotencia,
-                gerarQuestaoRaiz,
+            const geradores = [gerarQuestaoSoma, gerarQuestaoSubtracao, gerarQuestaoMultiplicacao, gerarQuestaoDivisao,
+                gerarQuestaoEquacao, gerarQuestaoMMC, gerarQuestaoPorcentagem, gerarQuestaoPotencia, gerarQuestaoRaiz,
                 gerarQuestaoSequencia
             ];
-            const gerador = geradores[rand(0, geradores.length - 1)];
-            return gerador();
+            return geradores[rand(0, geradores.length - 1)]();
         }
 
         function gerarAlternativas(respostaCorreta, tipo) {
             const alternativas = new Set();
             alternativas.add(respostaCorreta);
             while (alternativas.size < 4) {
-                let errada;
-                if (tipo === 'seq') {
-                    errada = respostaCorreta + rand(-5, 5);
-                } else {
-                    errada = respostaCorreta + rand(-20, 20);
-                }
-                if (errada !== respostaCorreta && errada > 0 && !alternativas.has(errada)) {
-                    alternativas.add(errada);
-                }
+                let errada = tipo === 'seq' ? respostaCorreta + rand(-5, 5) : respostaCorreta + rand(-20, 20);
+                if (errada !== respostaCorreta && errada > 0 && !alternativas.has(errada)) alternativas.add(errada);
             }
             return embaralharArray(Array.from(alternativas));
         }
 
-        // ==================== CRONOMETRO DA QUESTAO ====================
         function formatarTempo(segundos) {
-            const min = Math.floor(segundos / 60);
-            const seg = segundos % 60;
+            const min = Math.floor(segundos / 60),
+                seg = segundos % 60;
             return `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
         }
 
         function atualizarCronometroQuestao() {
             dom.cronometroQuestao.textContent = formatarTempo(estado.tempoRestanteQuestao);
-            if (estado.tempoRestanteQuestao <= 10) {
-                dom.cronometroQuestao.classList.add('urgente');
-            } else {
-                dom.cronometroQuestao.classList.remove('urgente');
-            }
+            dom.cronometroQuestao.classList.toggle('urgente', estado.tempoRestanteQuestao <= 10);
         }
 
         function iniciarTimerQuestao() {
@@ -536,57 +439,40 @@
                 atualizarCronometroQuestao();
                 if (estado.tempoRestanteQuestao <= 0) {
                     clearInterval(estado.timerQuestao);
-                    if (!estado.respondida && !estado.quizAcabou) {
-                        tempoEsgotadoQuestao();
-                    }
+                    if (!estado.respondida && !estado.quizAcabou) tempoEsgotadoQuestao();
                 }
             }, 1000);
         }
 
         function pararTimerQuestao() {
-            if (estado.timerQuestao) {
-                clearInterval(estado.timerQuestao);
-                estado.timerQuestao = null;
-            }
+            if (estado.timerQuestao) { clearInterval(estado.timerQuestao);
+                estado.timerQuestao = null; }
         }
 
         function tempoEsgotadoQuestao() {
             if (estado.respondida) return;
             estado.respondida = true;
             pararTimerQuestao();
-            // Revelar resposta correta
             const botoes = document.querySelectorAll('.btn-alternativa');
             botoes.forEach(btn => {
                 btn.disabled = true;
-                if (parseInt(btn.dataset.valor) === estado.questoes[estado.questaoAtual].respostaCorreta) {
-                    btn.classList.add('correta');
-                }
+                if (parseInt(btn.dataset.valor) === estado.questoes[estado.questaoAtual].respostaCorreta) btn
+                    .classList.add('correta');
             });
             dom.mensagem.innerHTML = '⏰ Tempo esgotado!';
             dom.mensagem.style.color = 'var(--erro)';
             estado.vidas--;
             atualizarVidas();
-            if (estado.vidas <= 0) {
-                setTimeout(finalizarQuiz, 1500);
-            } else {
-                setTimeout(proximaQuestao, 1500);
-            }
+            if (estado.vidas <= 0) setTimeout(finalizarQuiz, 1500);
+            else setTimeout(proximaQuestao, 1500);
         }
 
-        // ==================== LOGICA DO JOGO ====================
         function atualizarVidas() {
             dom.vidas.innerHTML = '❤️'.repeat(estado.vidas) + '🖤'.repeat(3 - estado.vidas);
         }
 
-        function atualizarDicas() {
-            dom.dicasRestantes.textContent = estado.dicasRestantes;
-        }
-
         function mostrarQuestao() {
-            if (estado.questaoAtual >= estado.totalQuestoes || estado.quizAcabou) {
-                finalizarQuiz();
-                return;
-            }
+            if (estado.questaoAtual >= estado.totalQuestoes || estado.quizAcabou) { finalizarQuiz(); return; }
             estado.respondida = false;
             const questao = estado.questoes[estado.questaoAtual];
             dom.pergunta.textContent = questao.pergunta;
@@ -613,14 +499,11 @@
             const botoes = document.querySelectorAll('.btn-alternativa');
             botoes.forEach(btn => {
                 btn.disabled = true;
-                if (parseInt(btn.dataset.valor) === questao.respostaCorreta) {
-                    btn.classList.add('correta');
-                }
+                if (parseInt(btn.dataset.valor) === questao.respostaCorreta) btn.classList.add('correta');
             });
             const btnEscolhido = Array.from(botoes).find(b => parseInt(b.dataset.valor) === valorEscolhido);
             if (valorEscolhido === questao.respostaCorreta) {
-                const tempoRestante = estado.tempoRestanteQuestao;
-                const pontosGanhos = Math.floor(900 * (tempoRestante / 60));
+                const pontosGanhos = Math.floor(900 * (estado.tempoRestanteQuestao / 60));
                 estado.pontuacao += pontosGanhos;
                 dom.pontuacao.textContent = estado.pontuacao;
                 dom.mensagem.innerHTML = `✅ Correto! +${pontosGanhos} pts`;
@@ -631,27 +514,20 @@
                 atualizarVidas();
                 dom.mensagem.innerHTML = '❌ Errado!';
                 dom.mensagem.style.color = 'var(--erro)';
-                if (estado.vidas <= 0) {
-                    setTimeout(finalizarQuiz, 1500);
-                    return;
-                }
+                if (estado.vidas <= 0) { setTimeout(finalizarQuiz, 1500); return; }
             }
             setTimeout(proximaQuestao, 1500);
         }
 
         function proximaQuestao() {
             estado.questaoAtual++;
-            if (estado.questaoAtual >= estado.totalQuestoes) {
-                finalizarQuiz();
-            } else {
-                mostrarQuestao();
-            }
+            if (estado.questaoAtual >= estado.totalQuestoes) finalizarQuiz();
+            else mostrarQuestao();
         }
 
         function finalizarQuiz() {
             estado.quizAcabou = true;
             pararTimerQuestao();
-            dom.jogoContainer.classList.remove('ativo');
             dom.telaResultado.classList.remove('escondido');
             dom.pontFinal.textContent = estado.pontuacao;
             if (estado.pontuacao >= 7000) {
@@ -674,31 +550,24 @@
             estado.respondida = false;
             estado.quizAcabou = false;
             estado.questoes = [];
-            // Gerar as 10 questoes
             for (let i = 0; i < estado.totalQuestoes; i++) {
-                const questaoBase = gerarQuestaoAleatoria();
-                const alternativas = gerarAlternativas(questaoBase.respostaCorreta, questaoBase.tipo);
+                const q = gerarQuestaoAleatoria();
                 estado.questoes.push({
-                    pergunta: questaoBase.pergunta,
-                    respostaCorreta: questaoBase.respostaCorreta,
-                    alternativas: alternativas
+                    pergunta: q.pergunta,
+                    respostaCorreta: q.respostaCorreta,
+                    alternativas: gerarAlternativas(q.respostaCorreta, q.tipo)
                 });
             }
             dom.pontuacao.textContent = '0';
             dom.barraFill.style.width = '0%';
             atualizarVidas();
-            atualizarDicas();
+            dom.dicasRestantes.textContent = estado.dicasRestantes;
             dom.telaResultado.classList.add('escondido');
-            dom.jogoContainer.classList.add('ativo');
             mostrarQuestao();
         }
 
-        // ==================== EVENTOS ====================
-        dom.btnComecar.addEventListener('click', () => {
-            dom.telaInicio.classList.add('escondido');
-            dom.jogoContainer.classList.add('ativo');
-            reiniciar();
-        });
+        // Iniciar automaticamente
+        reiniciar();
     </script>
 </body>
 </html>
